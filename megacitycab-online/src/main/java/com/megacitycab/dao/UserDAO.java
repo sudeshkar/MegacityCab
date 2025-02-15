@@ -4,6 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 
+import com.megacitycab.model.Customer;
+import com.megacitycab.model.CustomerStatus;
 import com.megacitycab.model.User;
 import com.megacitycab.model.UserRole;
 
@@ -26,13 +28,27 @@ public class UserDAO {
 				
 			}
 			
-		} catch (Exception e) {
+			if (rs.next()) {
+	            return new Customer(
+	            		rs.getInt("customerID"),
+	            		rs.getInt("name"),
+	            		rs.getString("name"),
+	            		rs.getString("password"),
+	            		rs.getString("email"),
+	                UserRole.valueOf(rs.getString("role")),
+	                rs.getString("address"),
+	                rs.getString("mobileNumber"),
+	                rs.getString("phoneNumber"),
+	                rs.getTimestamp("registrationDate").toLocalDateTime(),
+	                CustomerStatus.valueOf(rs.getString("status"))
+	            );
+	        }
+	        
+		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 		return null;
-		
 	}
-
-
 }
+
+

@@ -4,5 +4,15 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  <servlet>
+  	<servlet-name>RegisterController</servlet-name>
+  	<display-name>RegisterController</display-name>
+  	<description></description>
+  	<servlet-class>com.megacitycabs.controller.RegisterController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>RegisterController</servlet-name>
+  	<url-pattern>/RegisterController</url-pattern>
+  </servlet-mapping>
   
 </web-app>

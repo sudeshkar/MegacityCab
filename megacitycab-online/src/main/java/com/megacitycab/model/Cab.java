@@ -3,6 +3,7 @@ package com.megacitycab.model;
 import java.time.LocalDateTime;
 
 public class Cab {
+	private int cabID;
 	private String vehicleNumber;
 	private String model;
 	private CabCategory category;
@@ -12,8 +13,17 @@ public class Cab {
 	private LocalDateTime lastUpdated;
 	private Driver driver;
 
-	public Cab(Driver driver,String vehicleNumber,String model,CabCategory category,int capacity,String currentLocation,
+	public int getCabID() {
+		return cabID;
+	}
+
+	public void setCabID(int cabID) {
+		this.cabID = cabID;
+	}
+
+	public Cab(int cabID,Driver driver,String vehicleNumber,String model,CabCategory category,int capacity,String currentLocation,
 			CabStatus cabStatus) {
+			this.cabID=cabID;
 			this.driver=driver;
 			this.vehicleNumber=vehicleNumber;
 			this.model=model;
@@ -23,6 +33,10 @@ public class Cab {
 			this.lastUpdated= LocalDateTime.now();
 			this.cabStatus= cabStatus;
 
+	}
+
+	public Cab(int int1, Cab cab) {
+		// TODO Auto-generated constructor stub
 	}
 
 	public String getVehicleNumber() {
