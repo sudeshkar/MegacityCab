@@ -22,7 +22,7 @@
             </div>
 
             <div class="form-group">
-                <label for="username">Username<span class="required">*</span></label>
+                <label for="username">UserName<span class="required">*</span></label>
                 <input type="text" id="username" name="username" required>
             </div>
 
@@ -73,15 +73,6 @@
                     <input type="text" id="address" name="address">
                 </div>
 
-                <div class="form-group">
-                    <label for="paymentMethod">Preferred Payment Method<span class="required">*</span></label>
-                    <select id="paymentMethod" name="paymentMethod">
-                        <option value="">Select Payment Method</option>
-                        <option value="credit">Credit Card</option>
-                        <option value="debit">Debit Card</option>
-                        <option value="cash">Cash</option>
-                    </select>
-                </div>
             </div>
 
             <button type="submit" class="submit-btn">Register</button>
