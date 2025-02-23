@@ -18,6 +18,8 @@ import com.megacitycab.model.UserRole;
 
 
 public class UserDAOImplementation implements UserDAO {
+	
+	
 	private Connection conn;
 	public UserDAOImplementation(Connection conn) {
 		this.conn=conn;
@@ -244,7 +246,12 @@ public class UserDAOImplementation implements UserDAO {
 
 	@Override
 	public User login(String email, String password) {
-	    String query = "SELECT * FROM Users WHERE email= ? AND password=?";
+		String query = "SELECT u.*, c.customerID, c.address, c.mobileNumber, c.phoneNumber, c.registrationDate ," +
+                "d.driverID, d.licenseNumber, d.contactNumber, d.phoneNumber, d.status " +
+                "FROM Users u " +
+                "LEFT JOIN Customer c ON u.userID = c.userID " +
+                "LEFT JOIN Driver d ON u.userID = d.userID " +
+                "WHERE u.email = ? AND u.password = ?";
 	    
 	    try (Connection connection = DBConnectionFactory.getConnection();
 	         PreparedStatement statement = connection.prepareStatement(query)) {

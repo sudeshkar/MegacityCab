@@ -24,6 +24,12 @@
     <description></description>
     <servlet-class>com.megacitycabs.controller.BookingController</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>LoginService</servlet-name>
+  	<display-name>LoginService</display-name>
+  	<description></description>
+  	<servlet-class>com.megacitycab.service.LoginService</servlet-class>
+  </servlet>
    <servlet-mapping>
   	<servlet-name>RegisterController</servlet-name>
   	<url-pattern>/RegisterController</url-pattern>
@@ -37,6 +43,10 @@
   <servlet-mapping>
     <servlet-name>BookingController</servlet-name>
     <url-pattern>/BookingController/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>LoginService</servlet-name>
+  	<url-pattern>/LoginService</url-pattern>
   </servlet-mapping>
    
 </web-app>

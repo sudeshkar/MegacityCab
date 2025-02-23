@@ -10,6 +10,9 @@ public  class User {
 	private String email;
 	private UserRole role;
 	private Timestamp lastLogindate;
+	public User() {
+		
+	}
 
 	public User(int userID, String name, String email, UserRole role) {
 		this.userID=userID;

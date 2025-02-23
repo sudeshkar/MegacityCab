@@ -19,7 +19,7 @@ public class UserFactory {
                 return new Customer(
                     rs.getInt("customerID"),
                     rs.getInt("userID"), 
-                    rs.getString("name"),
+                    rs.getString("userName"),
                     rs.getString("password"),
                     rs.getString("email"),
                     UserRole.valueOf(rs.getString("role")),
@@ -33,7 +33,7 @@ public class UserFactory {
                 return new Driver(
                     rs.getInt("driverID"),
                     rs.getInt("userID"),
-                    rs.getString("name"),
+                    rs.getString("userName"),
                     rs.getString("password"),
                     rs.getString("email"),
                     role,
@@ -41,14 +41,14 @@ public class UserFactory {
                     rs.getString("contactNumber"),
                     rs.getString("phoneNumber"),
                     rs.getString("address"),
-                    DriverStatus.valueOf(rs.getString("driverStatus"))
+                    DriverStatus.valueOf(rs.getString("status"))
                 );
 
             default:
                
                 return new User(
                     rs.getInt("userID"),
-                    rs.getString("name"),
+                    rs.getString("userName"),
                     rs.getString("password"),
                     rs.getString("email"),
                     role

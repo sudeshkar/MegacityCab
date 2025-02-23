@@ -5,6 +5,12 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style >
+a:hover {
+	color: yellow;
+}
+
+</style>
 </head>
 <body>
 <!-- Footer Section -->
@@ -34,7 +40,7 @@
             <h4 style="color: #f9d342;">Contact Information</h4>
             <ul style="list-style: none; padding: 0; color: #dcdcdc;">
                 <li>Email: <a href="mailto:support@megacitycabs.com" style="color: #f9d342; text-decoration: none;">support@megacitycabs.com</a></li>
-                <li>Phone: <a href="tel:+1234567890" style="color: #f9d342; text-decoration: none;">123-456-7890</a></li>
+                <li>Phone: <a href="tel +94 774656751" style="color: #f9d342; text-decoration: none;">123-456-7890</a></li>
                 <li>Address: 123 City Road, MegaCity, ABC Country</li>
             </ul>
         </div>
@@ -50,16 +56,10 @@
 
     <!-- Copyright -->
     <div style="text-align: center; padding-top: 10px; font-size: 14px; color: #a0a0a0;">
-        <p>© 2025 MegaCity Cabs | All Rights Reserved.</p>
+        <p>© 2025 Sathieskumar Sudeshkar | All Rights Reserved.</p>
     </div>
 </footer>
 
-<!-- Footer Hover Effects -->
-<style>
-    footer a:hover {
-        color: #f9d342;
-    }
-</style>
 
 
 
