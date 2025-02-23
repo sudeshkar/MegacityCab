@@ -3,16 +3,19 @@ package com.megacitycab.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.megacitycab.model.Customer;
 import com.megacitycab.model.CustomerStatus;
+import com.megacitycab.model.Driver;
 import com.megacitycab.model.DriverStatus;
 import com.megacitycab.model.User;
 import com.megacitycab.model.UserRole;
-import com.mysql.jdbc.Driver;
+
 
 public class UserDAOImplementation implements UserDAO {
 	private Connection conn;
@@ -38,84 +41,192 @@ public class UserDAOImplementation implements UserDAO {
 
 	@Override
 	public User getUserById(int userId) {
-		String sql= "SELECT * FROM users WHERE id= ?";
-		String customerSql = "SELECT * FROM customer WHERE userID = ?";
-		String driverSql = "SELECT * FROM driver WHERE userID = ?";
-		try(PreparedStatement ps=conn.prepareStatement(sql)) {
-			ps.setInt(1, userId);
-			ResultSet rs = ps.executeQuery();
-			if (rs.next()) {
-				String role = rs.getString("role");
-				if ("CUSTOMER".equals(role)) {
-					try(PreparedStatement customerPs =conn.prepareStatement(customerSql)) {
-						customerPs.setInt(1, userId);
-						ResultSet customerRs = customerPs.executeQuery();
-						 if (customerRs.next()) {
-	                            return new Customer(
-	                                customerRs.getInt("customerID"),
-	                                rs.getInt("userID"),
-	                                rs.getString("userName"),
-	                                rs.getString("password"),
-	                                rs.getString("email"),
-	                                UserRole.valueOf(rs.getString("role")),
-	                                customerRs.getString("address"),
-	                                customerRs.getString("mobileNumber"),
-	                                customerRs.getString("phoneNumber"),
-	                                customerRs.getTimestamp("registrationDate").toLocalDateTime(),
-	                                CustomerStatus.valueOf(customerRs.getString("status"))
-	                            );
-	                        }
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					
-					
-				}else if("DRIVER".equals(role)) {
-					 try(PreparedStatement driverPs =conn.prepareStatement(driverSql)) {
-						 driverPs.setInt(1, userId);
-						 ResultSet driverRs = driverPs.executeQuery();
-						 
-//						 if (driverRs.next()) {
-//							return new Driver( 
-//									driverRs.getInt("driverID"),
-//		                            rs.getInt("userID"),
-//		                            rs.getString("userName"),
-//		                            rs.getString("password"),
-//		                            rs.getString("email"),
-//		                            UserRole.valueOf(rs.getString("role")),
-//		                            driverRs.getString("licenseNumber"),
-//		                            driverRs.getString("contactNumber"),
-//		                            driverRs.getString("phoneNumber"),
-//		                            driverRs.getString("address"),
-//		                            DriverStatus.valueOf(driverRs.getString("status"))
-//		                        );
-//							
-//						}
-						 
-						
-					} catch (Exception e) {
-						e.printStackTrace();
-					}					
-				}
-				
-				
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+        String sql = "SELECT * FROM users WHERE id = ?";
+        String customerSql = "SELECT * FROM customer WHERE userID = ?";
+        String driverSql = "SELECT * FROM driver WHERE userID = ?";
+        
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                String role = rs.getString("role");
+                
+                if ("CUSTOMER".equals(role)) {
+                    try (PreparedStatement customerPs = conn.prepareStatement(customerSql)) {
+                        customerPs.setInt(1, userId);
+                        ResultSet customerRs = customerPs.executeQuery();
+                        
+                        if (customerRs.next()) {
+                        	return new Customer(
+            	        		    rs.getInt("customerID"),
+            	        		    rs.getInt("customer_userID"),
+            	        		    rs.getString("customer_name"),
+            	        		    rs.getString("customer_password"),
+            	        		    rs.getString("customer_email"),
+            	        		    UserRole.valueOf(rs.getString("customer_role")),
+            	        		    rs.getString("customer_address"),
+            	        		    rs.getString("customer_mobile"),
+            	        		    CustomerStatus.valueOf(rs.getString("status")),
+            	        		    rs.getTimestamp("customer_registrationDate").toLocalDateTime()
+            	        		);
+                        }
+                    }
+                } else if ("DRIVER".equals(role)) {
+                    try (PreparedStatement driverPs = conn.prepareStatement(driverSql)) {
+                        driverPs.setInt(1, userId);
+                        ResultSet driverRs = driverPs.executeQuery();
+                        
+                        if (driverRs.next()) {
+                            
+                            return new Driver(
+                                driverRs.getInt("driverID"),
+                                rs.getInt("userID"),
+                                rs.getString("userName"),
+                                rs.getString("password"),
+                                rs.getString("email"),
+                                UserRole.valueOf(rs.getString("role")),
+                                driverRs.getString("licenseNumber"),
+                                driverRs.getString("contactNumber"),
+                                driverRs.getString("phoneNumber"),
+                                driverRs.getString("address"),
+                                DriverStatus.valueOf(driverRs.getString("status"))
+                            );
+                        }
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 	@Override
 	public User getUserByEmail(String email) {
-		// TODO Auto-generated method stub
-		return null;
+	    String sql = "SELECT * FROM users WHERE email = ?";
+	    String customerSql = "SELECT * FROM customer WHERE userID = ?";
+	    String driverSql = "SELECT * FROM driver WHERE userID = ?";
+	    
+	    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+	        ps.setString(1, email);
+	        ResultSet rs = ps.executeQuery();
+	        
+	        if (rs.next()) {
+	            String role = rs.getString("role");
+	            int userId = rs.getInt("userID");
+	            
+	            if ("CUSTOMER".equals(role)) {
+	                try (PreparedStatement customerPs = conn.prepareStatement(customerSql)) {
+	                    customerPs.setInt(1, userId);
+	                    ResultSet customerRs = customerPs.executeQuery();
+	                    
+	                    if (customerRs.next()) {
+	                        return new Customer(
+	        	        		    rs.getInt("customerID"),
+	        	        		    rs.getInt("customer_userID"),
+	        	        		    rs.getString("customer_name"),
+	        	        		    rs.getString("customer_password"),
+	        	        		    rs.getString("customer_email"),
+	        	        		    UserRole.valueOf(rs.getString("customer_role")),
+	        	        		    rs.getString("customer_address"),
+	        	        		    rs.getString("customer_mobile"),
+	        	        		    CustomerStatus.valueOf(rs.getString("status")),
+	        	        		    rs.getTimestamp("customer_registrationDate").toLocalDateTime()
+	        	        		);
+	                    }
+	                }
+	            } else if ("DRIVER".equals(role)) {
+	                try (PreparedStatement driverPs = conn.prepareStatement(driverSql)) {
+	                    driverPs.setInt(1, userId);
+	                    ResultSet driverRs = driverPs.executeQuery();
+	                    
+	                    if (driverRs.next()) {
+	                        return new Driver(
+	                            driverRs.getInt("driverID"),
+	                            rs.getInt("userID"),
+	                            rs.getString("userName"),
+	                            rs.getString("password"),
+	                            rs.getString("email"),
+	                            UserRole.valueOf(rs.getString("role")),
+	                            driverRs.getString("licenseNumber"),
+	                            driverRs.getString("contactNumber"),
+	                            driverRs.getString("phoneNumber"),
+	                            driverRs.getString("address"),
+	                            DriverStatus.valueOf(driverRs.getString("status"))
+	                        );
+	                    }
+	                }
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return null;
 	}
 
 	@Override
 	public List<User> getAllUsers() {
-		// TODO Auto-generated method stub
-		return null;
+	    List<User> users = new ArrayList<>();
+	    String sql = "SELECT * FROM users";
+	    String customerSql = "SELECT * FROM customer WHERE userID = ?";
+	    String driverSql = "SELECT * FROM driver WHERE userID = ?";
+	    
+	    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+	        ResultSet rs = ps.executeQuery();
+	        
+	        while (rs.next()) {
+	            String role = rs.getString("role");
+	            int userId = rs.getInt("userID");
+	            
+	            if ("CUSTOMER".equals(role)) {
+	                try (PreparedStatement customerPs = conn.prepareStatement(customerSql)) {
+	                    customerPs.setInt(1, userId);
+	                    ResultSet customerRs = customerPs.executeQuery();
+	                    
+	                    Customer customer = new Customer(
+	    	        		    rs.getInt("customerID"),
+	    	        		    rs.getInt("customer_userID"),
+	    	        		    rs.getString("customer_name"),
+	    	        		    rs.getString("customer_password"),
+	    	        		    rs.getString("customer_email"),
+	    	        		    UserRole.valueOf(rs.getString("customer_role")),
+	    	        		    rs.getString("customer_address"),
+	    	        		    rs.getString("customer_mobile"),
+	    	        		    CustomerStatus.valueOf(rs.getString("status")),
+	    	        		    rs.getTimestamp("customer_registrationDate").toLocalDateTime()
+	    	        		);
+	                    users.add(customer);
+	                    }
+	                
+	            } else if ("DRIVER".equals(role)) {
+	                try (PreparedStatement driverPs = conn.prepareStatement(driverSql)) {
+	                    driverPs.setInt(1, userId);
+	                    ResultSet driverRs = driverPs.executeQuery();
+	                    
+	                    if (driverRs.next()) {
+	                        Driver driver = new Driver(
+	                            driverRs.getInt("driverID"),
+	                            rs.getInt("userID"),
+	                            rs.getString("userName"),
+	                            rs.getString("password"),
+	                            rs.getString("email"),
+	                            UserRole.valueOf(rs.getString("role")),
+	                            driverRs.getString("licenseNumber"),
+	                            driverRs.getString("contactNumber"),
+	                            driverRs.getString("phoneNumber"),
+	                            driverRs.getString("address"),
+	                            DriverStatus.valueOf(driverRs.getString("status"))
+	                        );
+	                        users.add(driver);
+	                    }
+	                }
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return users;
 	}
 
 	@Override
@@ -130,44 +241,28 @@ public class UserDAOImplementation implements UserDAO {
 		return false;
 	}
 
+
 	@Override
 	public User login(String email, String password) {
-		String query="SELECT * FROM Users WHERE email= ? AND password=?";
-				
-		try{
-			Connection connection = DBConnectionFactory.getConnection();
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, email);
-            statement.setString(2, password);
-			ResultSet rs = statement.executeQuery();
-			if (rs.next()) {
-				UserRole role = UserRole.fromString(rs.getString("role"));
-				Timestamp lastLogindate = rs.getTimestamp("lastLoginDate");
-				return new User(rs.getInt("userID"),rs.getString("userName"),rs.getString("email"),role, lastLogindate);
-				
-			}
-			
-			if (rs.next()) {
-	            return new Customer(
-	            		rs.getInt("customerID"),
-	            		rs.getInt("name"),
-	            		rs.getString("name"),
-	            		rs.getString("password"),
-	            		rs.getString("email"),
-	                UserRole.valueOf(rs.getString("role")),
-	                rs.getString("address"),
-	                rs.getString("mobileNumber"),
-	                rs.getString("phoneNumber"),
-	                rs.getTimestamp("registrationDate").toLocalDateTime(),
-	                CustomerStatus.valueOf(rs.getString("status"))
-	            );
-	        }
+	    String query = "SELECT * FROM Users WHERE email= ? AND password=?";
+	    
+	    try (Connection connection = DBConnectionFactory.getConnection();
+	         PreparedStatement statement = connection.prepareStatement(query)) {
 	        
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return null;
+	        statement.setString(1, email);
+	        statement.setString(2, password);
+	        ResultSet rs = statement.executeQuery();
+	        
+	        if (rs.next()) {
+	        
+	        	return UserFactory.createUser(rs);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return null;
 	}
+
 
 }

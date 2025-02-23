@@ -1,0 +1,54 @@
+@charset "UTF-8";
+h2 {
+        text-align: center;
+        color: yellow;
+        padding-top: 20px;
+        font-family: "poppins"
+    }
+
+    /* Table styling */
+    table {
+        width: 80%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: center;
+        border: 2px solid #ddd;
+    }
+
+    th {
+        background-color: yellow;
+        color: black;
+    }
+
+    td {
+        background-color:black;
+    }
+
+
+    /* Action links styling */
+    a {
+        text-decoration: none;
+        color: #007bff;
+        font-weight: bold;
+        padding: 5px;
+        margin: 0 5px;
+    }
+
+    a:hover {
+        color: #0056b3;
+        text-decoration: underline;
+    }
+
+    /* Message for no bookings */
+    .no-bookings {
+        text-align: center;
+        color: #ff0000;
+        font-size: 16px;
+        padding: 20px;
+    }

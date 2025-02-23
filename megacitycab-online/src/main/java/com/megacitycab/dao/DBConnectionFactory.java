@@ -1,10 +1,10 @@
-package com.megacitycab.dao;
-
+	package com.megacitycab.dao;
 import java.sql.Connection;
-
-public class DBConnectionFactory {
-
-	public static Connection getConnection() {
-        return DBConnection.getInstance().getConnection();
-    }
-}
+import java.sql.SQLException;
+	
+	public class DBConnectionFactory {
+	
+		public static Connection getConnection() throws SQLException {
+	        return DBConnection.getConnection();
+	    }
+	}

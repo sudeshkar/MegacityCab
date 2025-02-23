@@ -3,7 +3,7 @@ package com.megacitycab.model;
 import java.sql.Timestamp;
 import java.time.Instant;
 
-public class User {
+public  class User {
 	private int userID;
 	private String name;
 	private String password;
@@ -11,25 +11,23 @@ public class User {
 	private UserRole role;
 	private Timestamp lastLogindate;
 
-	public User(int userID,String name,String password,String email,UserRole role) {
+	public User(int userID, String name, String email, UserRole role) {
 		this.userID=userID;
 		this.name =name;
-		this.password= password;
 		this.email =email;
 		this.role = role;
 		this.lastLogindate = Timestamp.from(Instant.now());
 	}
-	
 	public User(int userID,String name,String password,String email,UserRole role,Timestamp lastLogindate) {
 		this.userID=userID;
 		this.name =name;
 		this.password= password;
 		this.email =email;
 		this.role = role;
-		this.lastLogindate = Timestamp.from(Instant.now());
+		this.lastLogindate = lastLogindate;
 	}
 
-	public User(int userID, String name, String email, UserRole role, Timestamp lastLogindate) {
+	public User(int userID, String name, String password,String email, UserRole role) {
 		this.userID=userID;
 		this.name =name;
 		this.email =email;

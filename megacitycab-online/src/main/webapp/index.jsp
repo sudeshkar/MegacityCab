@@ -6,13 +6,19 @@
 <div class="logo">
 <img alt="cab_image" src="<%= request.getContextPath() %>/images/cab.jpeg">
 <h1>The Mega Cab Booking</h1>
+<button type="button" onclick="window.location.href ='';">About Us</button>
 </div>
+
+
+
+
+
 
 <div class="main">  	
 		
 
 			<div class="login">
-				<form class="form">
+				<form class="form" action="Clogin" method="post">
 					<label for="chk" aria-hidden="true">Megacity Cab Log in</label>
 					<input class="input" type="email" name="email" placeholder="Email" required="">
 					<input class="input" type="password" name="pswd" placeholder="Password" required="">

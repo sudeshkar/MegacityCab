@@ -3,9 +3,7 @@ package com.megacitycab.dao;
 import java.sql.Connection;	
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.ResultSet;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import com.megacitycab.model.Booking;
@@ -14,6 +12,7 @@ import com.megacitycab.model.Cab;
 import com.megacitycab.model.CabCategory;
 import com.megacitycab.model.CabStatus;
 import com.megacitycab.model.Customer;
+import com.megacitycab.model.CustomerStatus;
 import com.megacitycab.model.Driver;
 import com.megacitycab.model.DriverStatus;
 import com.megacitycab.model.UserRole;
@@ -36,6 +35,13 @@ public class BookingDAO {
 			statement.setInt(7, booking.getCab().getCabID());
 			statement.setInt(8, booking.getDriver().getUserID());
 			
+			int rowsInserted = statement.executeUpdate();
+	        if (rowsInserted > 0) {
+	            System.out.println("Booking successfully added.");
+	        } else {
+	            System.out.println("Failed to add booking.");
+	        }
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -44,71 +50,104 @@ public class BookingDAO {
 		
 	}
 	
-	public List<Booking> getAllBookings()throws SQLException{
-		List<Booking> bookings = new ArrayList<Booking>();
-		String query = "SELECT b.*, c.customerID, c.name AS customer_name, c.address AS customer_address"+
-                "c.mobileNumber AS customer_mobile, c.phoneNumber AS customer_phone"+
-                "d.driverID, d.name AS driver_name, d.licenseNumber, d.contactNumber AS driver_contact"+ 
-                "cb.cabID, cb.vehicleNumber, cb.model, cb.category, cb.capacity, cb.currentLocation, cb.status AS cab_status"+
-                "FROM booking b"+ 
-                "JOIN customer c ON b.customerID = c.customerID "+
-                "JOIN driver d ON b.driverID = d.driverID "+
-                "JOIN cab cb ON b.cabID = cb.cabID";
-		
-        try(Connection conn=DBConnectionFactory.getConnection();
-        		PreparedStatement prepareStatement=conn.prepareStatement(query);
-        		ResultSet rs= prepareStatement.executeQuery()){
-        	
-        	while (rs.next()) {
-        		int bookingNumber= rs.getInt("bookingNumber");
-        				
-        				Customer customers = new Customer(
-        	                    rs.getInt("customerID"),
-        	                    rs.getInt("userID"),
-        	                    rs.getString("name"),
-        	                    rs.getString("password"),
-        	                    rs.getString("email"),
-        	                    UserRole.valueOf(rs.getString("role")),
-        	                    rs.getString("address"),
-        	                    rs.getString("mobilenumber")
-        	                    
-        	                );
+	public List<Booking> getAllBookings() throws SQLException {
+	    List<Booking> bookings = new ArrayList<>();
+	    String query = "SELECT b.*, c.customerID, c.name AS customer_name, c.address AS customer_address, " +
+	            "c.mobileNumber AS customer_mobile, c.phoneNumber AS customer_phone, " +
+	            "c.userID AS customer_userID, c.registrationDate AS customer_registrationDate, c.status AS customer_status, " +
+	            "u.email AS customer_email, u.role AS customer_role, u.password AS customer_password, " +
+	            "d.driverID, d.name AS driver_name, d.licenseNumber, d.contactNumber AS driver_contact, " +
+	            "d.phoneNumber AS driver_phone, d.address AS driver_address, d.status AS driver_status, " +
+	            "d.userID AS driver_userID, u2.role AS driver_role, u2.password AS driver_password, u2.email AS driver_email, " +
+	            "cb.cabID, cb.vehicleNumber, cb.model, cb.category, cb.capacity, cb.currentLocation, cb.status AS cab_status " +
+	            "FROM booking b " +
+	            "JOIN customer c ON b.customerID = c.customerID " +
+	            "JOIN users u ON c.userID = u.userID " +
+	            "LEFT JOIN driver d ON b.driverID = d.driverID " +
+	            "LEFT JOIN users u2 ON d.userID = u2.userID " +
+	            "JOIN cab cb ON b.cabID = cb.cabID";
 
-        	                // Create Driver object
-        	                Driver driver = new Driver(
-        	                    rs.getInt("driverID"),
-        	                    rs.getInt("userID"),
-        	                    rs.getString("name"),
-        	                    rs.getString("password"),
-        	                    rs.getString("email"),
-        	                    UserRole.valueOf(rs.getString("role")),
-        	                    rs.getString("licenseNumber"),
-        	                    rs.getString("mobileNumber"),
-        	                    rs.getString("address"),
-        	                    DriverStatus.valueOf(rs.getString("status"))
-        	                );
+	    Connection conn = null;
+	    try {
+	        conn = DBConnectionFactory.getConnection();
+	        // Validate connection
+	        if (conn != null && !conn.isClosed()) {
+	            System.out.println("Connection is valid and open.");
+	            try (PreparedStatement preparedStatement = conn.prepareStatement(query);
+	                 ResultSet rs = preparedStatement.executeQuery()) {
+	                
+	                while (rs.next()) {
+	                    try {
+	                        Customer customer = new Customer(
+	                            rs.getInt("customerID"),
+	                            rs.getInt("customer_userID"),
+	                            rs.getString("customer_name"),
+	                            rs.getString("customer_password"),
+	                            rs.getString("customer_email"),
+	                            UserRole.valueOf(rs.getString("customer_role")),
+	                            rs.getString("customer_address"),
+	                            rs.getString("customer_mobile"),
+	                            CustomerStatus.valueOf(rs.getString("customer_status")),
+	                            rs.getTimestamp("customer_registrationDate").toLocalDateTime()
+	                        );
 
-        	                // Create Cab object
-        	                Cab cab = new Cab(
-        	                    rs.getInt("cabID"),
-        	                    driver,
-        	                    rs.getString("vehicleNumber"),
-        	                    rs.getString("model"),
-        	                    CabCategory.valueOf(rs.getString("category")),
-        	                    rs.getInt("capacity"),
-        	                    rs.getString("currentLocation"),
-        	                    CabStatus.valueOf(rs.getString("status"))
-        	                );	
-				
-			}
-			
-		} catch (Exception e) {
-			
-		}
-		
-		
-		return bookings;
+	                        Driver driver = new Driver(
+	                            rs.getInt("driverID"),
+	                            rs.getInt("driver_userID"),
+	                            rs.getString("driver_name"),
+	                            rs.getString("driver_password"),
+	                            rs.getString("driver_email"),
+	                            UserRole.valueOf(rs.getString("driver_role")),
+	                            rs.getString("licenseNumber"),
+	                            rs.getString("driver_contact"),
+	                            rs.getString("driver_phone"),
+	                            rs.getString("driver_address"),
+	                            DriverStatus.valueOf(rs.getString("driver_status"))
+	                        );
+
+	                        Cab cab = new Cab(
+	                            rs.getInt("cabID"),
+	                            driver,
+	                            rs.getString("vehicleNumber"),
+	                            rs.getString("model"),
+	                            CabCategory.valueOf(rs.getString("category")),
+	                            rs.getInt("capacity"),
+	                            rs.getString("currentLocation"),
+	                            CabStatus.valueOf(rs.getString("cab_status"))
+	                        );
+
+	                        Booking booking = new Booking(
+	                            rs.getInt("bookingNumber"),
+	                            customer,
+	                            rs.getTimestamp("bookingDateTime").toLocalDateTime(),
+	                            rs.getString("pickupLocation"),
+	                            rs.getString("destination"),
+	                            rs.getDouble("distance"),
+	                            BookingStatus.valueOf(rs.getString("status")),
+	                            cab,
+	                            driver
+	                        );
+
+	                        bookings.add(booking);
+	                    } catch (IllegalArgumentException | NullPointerException e) {
+	                        System.err.println("Skipping invalid record: " + e.getMessage());
+	                    }
+	                }
+	            }
+	        } else {
+	            throw new SQLException("Connection is closed or invalid.");
+	        }
+	    } catch (SQLException e) {
+	        System.err.println("Error fetching bookings: " + e.getMessage());
+	        e.printStackTrace();  // Ensure the stack trace is logged
+	        throw new SQLException("Error fetching bookings: " + e.getMessage(), e);
+	    } 
+
+	    return bookings;
 	}
+
+
+
 	public Booking getBookingById(int bookingId) throws SQLException {
 	    String query = "SELECT b.*, " +
 	                  "c.customerID, c.name AS customer_name, c.address AS customer_address, " +
@@ -121,38 +160,41 @@ public class BookingDAO {
 	                  "JOIN cab cb ON b.cabID = cb.cabID " +
 	                  "WHERE b.bookingNumber = ?";
 
-	    try (Connection conn = DBConnectionFactory.getConnection();
-	         PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+	    try { Connection conn = DBConnectionFactory.getConnection();
+	         PreparedStatement preparedStatement = conn.prepareStatement(query);
 	        
 	        preparedStatement.setInt(1, bookingId);
 	        
 	        try (ResultSet rs = preparedStatement.executeQuery()) {
 	            if (rs.next()) {
 	                // Create Customer object
-	                Customer customer = new Customer(
-	                    rs.getInt("customerID"),
-	                    rs.getInt("userID"),
-	                    rs.getString("name"),
-	                    rs.getString("password"),
-	                    rs.getString("email"),
-	                    UserRole.valueOf(rs.getString("role")),
-	                    rs.getString("address"),
-	                    rs.getString("mobileNumber")
-	                );
+	            	Customer customer = new Customer(
+		        		    rs.getInt("customerID"),
+		        		    rs.getInt("customer_userID"),
+		        		    rs.getString("customer_name"),
+		        		    rs.getString("customer_password"),
+		        		    rs.getString("customer_email"),
+		        		    UserRole.valueOf(rs.getString("customer_role")),
+		        		    rs.getString("customer_address"),
+		        		    rs.getString("customer_mobile"),
+		        		    CustomerStatus.valueOf(rs.getString("status")),
+		        		    rs.getTimestamp("customer_registrationDate").toLocalDateTime()
+		        		);
 
 	                // Create Driver object
 	                Driver driver = new Driver(
-	                    rs.getInt("driverID"),
-	                    rs.getInt("userID"),
-	                    rs.getString("name"),
-	                    rs.getString("password"),
-	                    rs.getString("email"),
-	                    UserRole.valueOf(rs.getString("role")),
-	                    rs.getString("licenseNumber"),
-	                    rs.getString("mobileNumber"),
-	                    rs.getString("address"),
-	                    DriverStatus.valueOf(rs.getString("status"))
-	                );
+	            	        rs.getInt("driverID"),
+	            	        rs.getInt("userID"),
+	            	        rs.getString("name"),
+	            	        rs.getString("password"),
+	            	        rs.getString("email"),
+	            	        UserRole.valueOf(rs.getString("role")),
+	            	        rs.getString("licenseNumber"),
+	            	        rs.getString("contactNumber"),
+	            	        rs.getString("mobileNumber"),
+	            	        rs.getString("address"),
+	            	        DriverStatus.valueOf(rs.getString("status"))
+	            	    );
 
 	                // Create Cab object
 	                Cab cab = new Cab(
@@ -300,16 +342,18 @@ public class BookingDAO {
 
 	// Helper method to create Booking object from ResultSet
 	private Booking createBookingFromResultSet(ResultSet rs) throws SQLException {
-	    Customer customer = new Customer(
-	        rs.getInt("customerID"),
-	        rs.getInt("userID"),
-	        rs.getString("name"),
-	        rs.getString("password"),
-	        rs.getString("email"),
-	        UserRole.valueOf(rs.getString("role")),
-	        rs.getString("address"),
-	        rs.getString("mobileNumber")
-	    );
+		Customer customer = new Customer(
+    		    rs.getInt("customerID"),
+    		    rs.getInt("customer_userID"),
+    		    rs.getString("customer_name"),
+    		    rs.getString("customer_password"),
+    		    rs.getString("customer_email"),
+    		    UserRole.valueOf(rs.getString("customer_role")),
+    		    rs.getString("customer_address"),
+    		    rs.getString("customer_mobile"),
+    		    CustomerStatus.valueOf(rs.getString("status")),
+    		    rs.getTimestamp("customer_registrationDate").toLocalDateTime()
+    		);
 
 	    Driver driver = new Driver(
 	        rs.getInt("driverID"),
@@ -319,6 +363,7 @@ public class BookingDAO {
 	        rs.getString("email"),
 	        UserRole.valueOf(rs.getString("role")),
 	        rs.getString("licenseNumber"),
+	        rs.getString("contactNumber"),
 	        rs.getString("mobileNumber"),
 	        rs.getString("address"),
 	        DriverStatus.valueOf(rs.getString("status"))
