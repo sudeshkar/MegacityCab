@@ -39,7 +39,11 @@ public class Driver extends User{
         this.address = address;
         this.driverStatus = driverStatus;
     }
+    public Driver() {
+  
+    }
 	
+    
 	
 	
 	public String getPhoneNumber() {
