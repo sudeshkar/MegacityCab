@@ -42,9 +42,7 @@ public class Driver extends User{
     public Driver() {
   
     }
-	
-    
-	
+
 	
 	public String getPhoneNumber() {
 		return phoneNumber;

@@ -10,8 +10,8 @@ public interface DriverDAO {
 	Driver getDriverById(int driverId);
 	Driver getDriverByEmail(String email);
 	List<Driver> getAllDrivers();
-	boolean updateDriver();
-	boolean deleteDriver();
+	boolean updateDriver(Driver driver);
+	boolean deleteDriver(int userID);
 	
 	
 
