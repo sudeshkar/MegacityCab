@@ -1,7 +1,18 @@
+<%@page import="com.megacitycab.model.User"%>
+<%@page import="com.megacitycab.utils.SessionUtils"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <jsp:include page="header.jsp" />
+<%
+	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+if (!SessionUtils.isUserLoggedIn(request)) {
+    response.sendRedirect("login.jsp");
+    return;
+}
+User loggedInUser = SessionUtils.getLoggedInUser(request);
 
+
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,8 +27,10 @@
 <div class="container">
 <img alt="cabBG" src="<%= request.getContextPath() %>/images/cabbooking.jpg">
 <div class="Wtext">
-<h2>Welcome to MegaCity Cabs!
-Your Ride, Your Way.
+<div class="welcomeboard">
+<h2>Welcome, <div class="Dusername"><%= loggedInUser.getName() %>!  </div> </div>
+<h3> to MegaCity Cabs! 
+Your Ride, Your Way.  </h3>
 </h2>
 <h4>MegaCity Cabs is here to provide you with fast, reliable, and affordable transportation in the city. Whether you're heading to work, catching a flight, or simply need to get from point A to point B, we’ve got you covered.</h4>
 </div>

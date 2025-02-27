@@ -3,6 +3,7 @@ package com.megacitycab.model;
 import java.time.LocalDateTime;
 
 public class Bill {
+	private int billNumber;
 	private Booking booking;
 	private double baseAmount;
 	private double discountAmount;
@@ -21,8 +22,24 @@ public class Bill {
 		this.billDate=LocalDateTime.now();
 		this.paymentStatus= PaymentStatus.PENDING;
 	}
+	public Bill(Booking booking,double baseAmount,double discountAmount,int billNumber,double taxAmount,double totalFare,LocalDateTime billDate,PaymentStatus paymentStatus) {
+		this.billNumber = billNumber;
+		this.booking=booking;
+		this.baseAmount=baseAmount;
+		this.discountAmount=discountAmount;
+		this.taxAmount=taxAmount;
+		this.totalFare=totalFare;
+		this.billDate= billDate;
+		this.paymentStatus= paymentStatus;
+	}
 
 
+	public int getBillNumber() {
+		return billNumber;
+	}
+	public void setBillNumber(int billNumber) {
+		this.billNumber = billNumber;
+	}
 	public Booking getBooking() {
 		return booking;
 	}

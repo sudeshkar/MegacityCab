@@ -1,9 +1,17 @@
+<%@page import="com.megacitycab.model.User"%>
+<%@page import="com.megacitycab.utils.SessionUtils"%>
 <%@page import="com.megacitycab.model.Booking"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="header.jsp" %>
-
+<%
+response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+if (!SessionUtils.isUserLoggedIn(request)) {
+    response.sendRedirect("login.jsp");
+    return;
+}
+%>
 <%
     List<Booking> bookings = (List<Booking>) request.getAttribute("bookings");
     String userRole = (String) session.getAttribute("userRole");

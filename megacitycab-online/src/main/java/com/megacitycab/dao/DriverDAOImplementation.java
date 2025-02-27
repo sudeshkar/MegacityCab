@@ -113,7 +113,7 @@ public class DriverDAOImplementation implements DriverDAO{
 
 	@Override
 	public List<Driver> getAllDrivers() {
-		 List<Driver> drivers = new ArrayList();
+		 List<Driver> drivers = new ArrayList<Driver>();
 
 	        
 	        List<User> allUsers = userDAO.getAllUsers();

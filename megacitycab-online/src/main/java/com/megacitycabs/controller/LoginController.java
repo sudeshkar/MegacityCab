@@ -28,17 +28,17 @@ public class LoginController extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		doGet(request, response);
 		login(request,response);
 		
 		
 
-		doGet(request, response);
+		
 	}
 	
 	private void login(HttpServletRequest request,HttpServletResponse response)throws ServletException, IOException {
@@ -55,7 +55,7 @@ public class LoginController extends HttpServlet {
 		}else
 		{
 			HttpSession session = request.getSession();
-			session.setAttribute("email", user.getEmail());
+			session.setAttribute("loggedInUser", user);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("home.jsp");
 			dispatcher.forward(request, response);
 		}

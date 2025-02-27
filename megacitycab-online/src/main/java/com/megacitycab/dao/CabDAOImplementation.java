@@ -5,13 +5,27 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.megacitycab.model.Cab;
 import com.megacitycab.model.CabCategory;
 import com.megacitycab.model.CabStatus;
+import com.megacitycab.model.Driver;
 
 public class CabDAOImplementation implements CabDAO{
+	
+	private Connection conn;
+    private DriverDAO driverDAO;  
+
+    public CabDAOImplementation(Connection conn, DriverDAO driverDAO) {
+    	this.conn= conn;
+    	this.driverDAO=driverDAO;
+    }
+    public CabDAOImplementation() {
+    	
+    }
 	
 	@Override
 	public boolean addCab(Cab cab) {
@@ -64,37 +78,87 @@ public class CabDAOImplementation implements CabDAO{
 	             
 	         
 
-	            return cab; // Return the populated cab object
+	            return cab;  
 	        }
 	    } catch (SQLException e) {
 	        System.err.println("Error fetching cab: " + e.getMessage());
 	    }
-	    return null; // Return null if no cab found or error occurs
+	    return null;  
 	}
 
 
-	@Override
-	public Cab getCabByEmail(String email) {
-		
-		return null;
-	}
-
-	@Override
 	public List<Cab> getAllCabs() {
-		// TODO Auto-generated method stub
-		return null;
+	    List<Cab> cabs = new ArrayList<Cab>();
+	    String sql = "SELECT * FROM cab";
+
+	    try ( Connection connection = DBConnectionFactory.getConnection();
+	    	PreparedStatement ps = connection.prepareStatement(sql);
+	         ResultSet rs = ps.executeQuery()) {
+
+	        while (rs.next()) {
+	        	Driver driver = driverDAO.getDriverById(rs.getInt("driverID"));
+	            Cab cab = new Cab(
+	            		rs.getInt("cabID"),
+	                    rs.getString("vehicleNumber"),
+	                    rs.getString("model"),
+	                    CabCategory.valueOf(rs.getString("category").toString()),  
+	                    rs.getInt("capacity"),
+	                    rs.getString("currentLocation"),
+	                    CabStatus.valueOf(rs.getString("cabStatus").toString()),  
+	                    rs.getTimestamp("lastUpdated").toLocalDateTime(), 
+	                    driver
+	                      
+	            );
+	            cabs.add(cab);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return cabs;
+	}
+	
+	@Override
+	public boolean updateCab(Cab cab) {
+	    String sql = "UPDATE cab SET vehicleNumber = ?, model = ?, category = ?, capacity = ?, " +
+	                 "currentLocation = ?, cabStatus = ?, lastUpdated = ?, driverID = ? WHERE cabID = ?";
+	    
+	    try (Connection connection = DBConnectionFactory.getConnection();
+	         PreparedStatement ps = connection.prepareStatement(sql)) {
+
+	        ps.setString(1, cab.getVehicleNumber());
+	        ps.setString(2, cab.getModel());
+	        ps.setString(3, cab.getCategory().toString());
+	        ps.setInt(4, cab.getCapacity());
+	        ps.setString(5, cab.getCurrentLocation());
+	        ps.setString(6, cab.getCabStatus().toString());
+	        ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));  
+	        ps.setInt(8, cab.getDriver().getDriverID()); 
+	        ps.setInt(9, cab.getCabID());
+
+	        int rowsAffected = ps.executeUpdate();
+	        return rowsAffected > 0;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return false;
 	}
 
 	@Override
-	public boolean updateCab(Cab Cab) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean deleteCab(int cabId) {
+	    String sql = "DELETE FROM cab WHERE cabID = ?";
+
+	    try (Connection connection = DBConnectionFactory.getConnection();
+	         PreparedStatement ps = connection.prepareStatement(sql)) {
+
+	        ps.setInt(1, cabId);
+
+	        int rowsAffected = ps.executeUpdate();
+	        return rowsAffected > 0;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return false;
 	}
 
-	@Override
-	public boolean deleteCab(int Cabid) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 }

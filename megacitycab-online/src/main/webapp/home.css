@@ -23,3 +23,15 @@ img{
 	padding:30px;
 	font-family: "Poppins";
 }
+
+h2 .Dusername{
+	color: red;
+	font-size: 2rem;
+}
+.welcomeboard{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-content: center;
+	justify-content: center;
+}

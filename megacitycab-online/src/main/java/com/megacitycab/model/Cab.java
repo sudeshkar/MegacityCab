@@ -23,6 +23,18 @@ public class Cab {
 	
 	public Cab() {
 	}
+	public Cab(int cabID, String vehicleNumber, String model, CabCategory category, int capacity,
+            String currentLocation, CabStatus cabStatus, LocalDateTime lastUpdated, Driver driver) {
+     this.cabID = cabID;
+     this.vehicleNumber = vehicleNumber;
+     this.model = model;
+     this.category = category;
+     this.capacity = capacity;
+     this.currentLocation = currentLocation;
+     this.cabStatus = cabStatus;
+     this.lastUpdated = lastUpdated;
+     this.driver = driver;
+ }
 
 	public Cab(int cabID,Driver driver,String vehicleNumber,String model,CabCategory category,int capacity,String currentLocation,
 			CabStatus cabStatus) {
@@ -37,6 +49,7 @@ public class Cab {
 			this.cabStatus= cabStatus;
 
 	}
+	
 	public Cab(int cabID,String vehicleNumber,String model,CabCategory category,int capacity,String currentLocation,
 			CabStatus cabStatus) {
 			this.cabID=cabID;
