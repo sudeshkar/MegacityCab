@@ -21,6 +21,13 @@ public  class User {
 		this.role = role;
 		this.lastLogindate = Timestamp.from(Instant.now());
 	}
+	public User(String name, String email, UserRole role,String password) {
+		this.name =name;
+		this.password = password;
+		this.email =email;
+		this.role = role;
+		this.lastLogindate = Timestamp.from(Instant.now());
+	}
 	public User(int userID,String name,String password,String email,UserRole role,Timestamp lastLogindate) {
 		this.userID=userID;
 		this.name =name;

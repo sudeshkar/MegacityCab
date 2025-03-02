@@ -3,6 +3,7 @@ package com.megacitycab.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,15 @@ public class DriverDAOImplementation implements DriverDAO{
 	public DriverDAOImplementation (Connection conn, UserDAO userDAO) {
 		this.conn = conn;
         this.userDAO = userDAO;
+    }
+	public DriverDAOImplementation () {
+		try {
+			this.conn = DBConnectionFactory.getConnection();
+		} catch (SQLException e) {
+			 
+			e.printStackTrace();
+		}
+		this.userDAO = new UserDAOImplementation();
     }
 
 	
@@ -121,7 +131,8 @@ public class DriverDAOImplementation implements DriverDAO{
 	        
 	        String sql = "SELECT * FROM driver WHERE userID = ?";
 
-	        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+	        try (	Connection conn =DBConnectionFactory.getConnection();
+	        		PreparedStatement ps = conn.prepareStatement(sql)) {
 	            for (User user : allUsers) {
 	                ps.setInt(1, user.getUserID());
 	                try (ResultSet rs = ps.executeQuery()) {

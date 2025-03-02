@@ -14,6 +14,19 @@ public class Booking {
 	private Driver driver;
 	
 	//for new booking
+	public Booking(Customer customer, LocalDateTime bookingDateTime, 
+            String pickupLocation, String destination, double distance 
+            , Cab cab, Driver driver) {
+		 this.customer = customer;
+		 this.bookingDateTime = bookingDateTime;
+		 this.pickupLocation = pickupLocation;
+		 this.destination = destination;
+		 this.distance = distance;
+		 this.status = BookingStatus.PENDING; 
+		 this.cab = cab;
+		 this.driver = driver;
+		}
+	
 	public Booking(int bookingNumber, Customer customer, String pickupLocation, 
             String destination, double distance, Cab cab, Driver driver) {
 			 this.bookingNumber = bookingNumber;
@@ -26,6 +39,18 @@ public class Booking {
 			 this.cab = cab;
 			 this.driver = driver;
 			}
+	public Booking(Customer customer, String pickupLocation, 
+            String destination, double distance, Cab cab, Driver driver) {
+			 this.customer = customer;
+			 this.bookingDateTime = LocalDateTime.now(); 
+			 this.status = BookingStatus.PENDING; 
+			 this.pickupLocation = pickupLocation;
+			 this.destination = destination;
+			 this.distance = distance;
+			 this.cab = cab;
+			 this.driver = driver;
+			}
+	
 	
 	//for fetching existing booking from DB 
 	public Booking(int bookingNumber, Customer customer, LocalDateTime bookingDateTime, 
@@ -41,6 +66,9 @@ public class Booking {
 		 this.cab = cab;
 		 this.driver = driver;
 		}
+	public Booking() {
+		
+	}
 	
 	
 

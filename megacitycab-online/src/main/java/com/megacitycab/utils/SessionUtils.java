@@ -21,7 +21,7 @@ public class SessionUtils {
     public static void logoutUser(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
-        	session.removeAttribute("loggedInUser");
+        	session.removeAttribute("loggedInUser");	
             session.invalidate();
         }
     }

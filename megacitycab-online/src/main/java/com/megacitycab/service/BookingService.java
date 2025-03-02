@@ -27,9 +27,24 @@ public class BookingService {
 		 
 		 
 		 public List<Booking> getAllBookings()throws SQLException{
+			 
 			 return bookingDAO.getAllBookings();
 		 }
-
+		 
+		 public List<Booking> getBookingsByUserID(int userid) throws SQLException
+		 {
+			 return bookingDAO.getBookingByUserID(userid);
+		 }
+		 
+		 public int addBooking(Booking booking) {
+			 return bookingDAO.addBooking(booking);
+		 }
+		 
+		 public List<Booking> getBookingByCustomerID(int customerid) throws Exception{
+			 
+			 return bookingDAO.getBookingByCustomerID(customerid);
+		 }
+		 
 		}
 
 

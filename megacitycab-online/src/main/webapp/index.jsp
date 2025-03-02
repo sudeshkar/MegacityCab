@@ -6,8 +6,27 @@
 <div class="logo">
 <img alt="cab_image" src="<%= request.getContextPath() %>/images/cab.jpeg">
 <h1>The Mega Cab Booking</h1>
-<button type="button" onclick="window.location.href ='';">About Us</button>
+<%
+String loginMessage = (String) session.getAttribute("loginMessage");
+String messageType = (String) session.getAttribute("messageType");
+if (loginMessage != null) {
+%>
+<div class="notification <%= messageType %>">
+    <%= loginMessage %>
 </div>
+<script>
+    setTimeout(function() {
+        document.getElementById("notification").style.display = "none";
+    }, 3000);  
+</script>
+<%
+    session.removeAttribute("loginMessage"); 
+    session.removeAttribute("messageType");
+}
+%>
+<button type="button" onclick="window.location.href ='AboutUs.jsp';">About Us</button>
+</div>
+
 
 
 
@@ -24,6 +43,7 @@
 					<input class="input" type="password" name="pswd" placeholder="Password" required="">
 					<button>Log in</button>
 				</form>
+				
 				<div class="register">
 					<p>if you don't have an account </p>
 					<button type="button" onclick="window.location.href ='Register';">RegisterNow</button>

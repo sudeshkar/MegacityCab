@@ -24,11 +24,22 @@ public class UserDAOImplementation implements UserDAO {
 	public UserDAOImplementation(Connection conn) {
 		this.conn=conn;
 	}
+	public UserDAOImplementation() {
+		try {
+			this.conn = DBConnectionFactory.getConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
 
 	@Override
 	public boolean addUser(User user) {
 		String sql = "INSERT INTO users (userName, password, email, role,lastLoginDate) VALUES (?, ?, ?, ?,?)";
-		try(PreparedStatement ps = conn.prepareStatement(sql)) {
+		try(	Connection conn = DBConnectionFactory.getConnection();
+				PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setString(1, user.getName());
 			ps.setString(2, user.getPassword());
 			ps.setString(3, user.getEmail());
@@ -36,6 +47,7 @@ public class UserDAOImplementation implements UserDAO {
 			ps.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
 			
 			int rowsAffected = ps.executeUpdate(); 
+			System.out.println("User Created");
 	        return rowsAffected > 0;
 			
 		} catch (Exception e) {
@@ -49,7 +61,8 @@ public class UserDAOImplementation implements UserDAO {
 	public User getUserById(int userId) {
 		String sql = "SELECT * FROM users WHERE userID = ?";
 	    User user = null;
-	    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+	    try (	Connection conn = DBConnectionFactory.getConnection();
+	    		PreparedStatement ps = conn.prepareStatement(sql)) {
 	        ps.setInt(1, userId);  
 
 	        try (ResultSet rs = ps.executeQuery()) {
@@ -60,15 +73,30 @@ public class UserDAOImplementation implements UserDAO {
 	                user.setName(rs.getString("userName"));
 	                user.setPassword(rs.getString("password"));
 	                user.setEmail(rs.getString("email"));
-	                user.setRole(UserRole.valueOf("role")); 
+	                String roleString = rs.getString("role");
+	                try {
+	                    UserRole role = UserRole.valueOf(roleString.toUpperCase());
+	                    user.setRole(role);
+	                } catch (IllegalArgumentException e) {
+	                    System.err.println("Invalid role found: " + roleString);
+	                    
+	                }
 	                user.setLastLogindate(rs.getTimestamp("lastLoginDate"));
+	                
 	            }
+	            
 	        }
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
-		
-        return user;
+	    
+	    if (user == null) {
+	        System.out.println("User not found for userID: " + userId);
+	    } else {
+	        System.out.println("User retrieved: " + user.getName());
+	    }
+	    return user;	
+        
     }
 
 	@Override
@@ -101,16 +129,20 @@ public class UserDAOImplementation implements UserDAO {
 	    List<User> users = new ArrayList<>();
 	    String sql = "SELECT * FROM users";
 	    
-	    try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+	    try (	Connection conn = DBConnectionFactory.getConnection();
+	    		PreparedStatement ps = conn.prepareStatement(sql)) {
 	        
-
+	    	ResultSet rs = ps.executeQuery();
 	    	while (rs.next()) {
 	    		User user = new User();
                 user.setUserID(rs.getInt("userID"));
                 user.setName(rs.getString("userName"));
                 user.setPassword(rs.getString("password"));
                 user.setEmail(rs.getString("email"));
-                user.setRole(UserRole.valueOf("role")); 
+                String role = rs.getString("role");   
+                if (role != null) {
+                    user.setRole(UserRole.valueOf(role.toUpperCase()));  
+                } 
                 user.setLastLogindate(rs.getTimestamp("lastLoginDate"));;
 	            
 	            users.add(user);  
@@ -118,7 +150,9 @@ public class UserDAOImplementation implements UserDAO {
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
-	    
+	    if (users.isEmpty()) {
+			System.out.println("user fetch no Found ");
+		}
 	    return users;
 	}
 
@@ -126,7 +160,8 @@ public class UserDAOImplementation implements UserDAO {
 	public boolean updateUser(User user) {
 	    String sql = "UPDATE users SET userName = ?, password = ?, email = ?, role = ?, lastLoginDate = ? WHERE userId = ?";
 	    
-	    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+	    try (	Connection conn = DBConnectionFactory.getConnection();
+	    		PreparedStatement ps = conn.prepareStatement(sql)) {
 	        
 	        ps.setString(1, user.getName());
 	        ps.setString(2, user.getPassword());
@@ -150,7 +185,8 @@ public class UserDAOImplementation implements UserDAO {
 	public boolean deleteUser(int userId) {
 	    String sql = "DELETE FROM users WHERE userId = ?";
 	    
-	    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+	    try (	Connection conn= DBConnectionFactory.getConnection();
+	    		PreparedStatement ps = conn.prepareStatement(sql)) {
 	        
 	        ps.setInt(1, userId);
 	        
@@ -169,13 +205,8 @@ public class UserDAOImplementation implements UserDAO {
 
 	@Override
 	public User login(String email, String password) {
-		String query = "SELECT u.*, c.customerID, c.address, c.mobileNumber, c.phoneNumber, c.registrationDate ," +
-                "d.driverID, d.licenseNumber, d.contactNumber, d.phoneNumber, d.status " +
-                "FROM Users u " +
-                "LEFT JOIN Customer c ON u.userID = c.userID " +
-                "LEFT JOIN Driver d ON u.userID = d.userID " +
-                "WHERE u.email = ? AND u.password = ?";
-	    
+		String query = "SELECT * FROM users WHERE email = ? AND password = ?";
+		User user = new User();
 	    try (Connection connection = DBConnectionFactory.getConnection();
 	         PreparedStatement statement = connection.prepareStatement(query)) {
 	        
@@ -184,14 +215,31 @@ public class UserDAOImplementation implements UserDAO {
 	        ResultSet rs = statement.executeQuery();
 	        
 	        if (rs.next()) {
-	        
-	        	return UserFactory.createUser(rs);
+	        	
+                user.setUserID(rs.getInt("userID"));
+                user.setName(rs.getString("userName"));
+                user.setPassword(rs.getString("password"));
+                user.setEmail(rs.getString("email"));
+                String roleString = rs.getString("role");
+                try {
+                    UserRole role = UserRole.valueOf(roleString.toUpperCase());
+                    user.setRole(role);
+                } catch (IllegalArgumentException e) {
+                    System.err.println("Invalid role found: " + roleString);
+                    
+                }
+                user.setLastLogindate(rs.getTimestamp("lastLoginDate"));
+                
+	        	
+	        }
+	        else {
+	        	System.out.println("UserNot Found");
 	        }
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
 	    
-	    return null;
+	    return user;
 	}
 
 

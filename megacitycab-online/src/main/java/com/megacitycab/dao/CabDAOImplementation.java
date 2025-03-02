@@ -24,7 +24,7 @@ public class CabDAOImplementation implements CabDAO{
     	this.driverDAO=driverDAO;
     }
     public CabDAOImplementation() {
-    	
+    	this.driverDAO = new DriverDAOImplementation();
     }
 	
 	@Override
@@ -104,7 +104,7 @@ public class CabDAOImplementation implements CabDAO{
 	                    CabCategory.valueOf(rs.getString("category").toString()),  
 	                    rs.getInt("capacity"),
 	                    rs.getString("currentLocation"),
-	                    CabStatus.valueOf(rs.getString("cabStatus").toString()),  
+	                    CabStatus.valueOf(rs.getString("status").toString()),  
 	                    rs.getTimestamp("lastUpdated").toLocalDateTime(), 
 	                    driver
 	                      

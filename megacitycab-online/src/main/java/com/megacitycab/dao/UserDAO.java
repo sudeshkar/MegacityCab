@@ -3,6 +3,7 @@ package com.megacitycab.dao;
 import java.util.List;
 
 import com.megacitycab.model.User;
+import com.megacitycab.model.UserRole;
 
 public interface UserDAO {
 	 boolean addUser(User user);

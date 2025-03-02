@@ -27,8 +27,8 @@ public class LoginService {
         return instance;
     }
     
-    public User login(User user){
-    	return userDAO.login(user.getEmail(), user.getPassword());
+    public User login(String email,String password){
+    	return userDAO.login(email, password);
     }
     
 }

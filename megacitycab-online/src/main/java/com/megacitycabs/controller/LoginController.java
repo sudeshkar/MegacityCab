@@ -33,12 +33,8 @@ public class LoginController extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
 		login(request,response);
-		
-		
-
-		
+	
 	}
 	
 	private void login(HttpServletRequest request,HttpServletResponse response)throws ServletException, IOException {
@@ -48,13 +44,20 @@ public class LoginController extends HttpServlet {
 		String password= request.getParameter("pswd");
 		user.setEmail(email);
 		user.setPassword(password);
-		user =loginService.login(user);
+		user =loginService.login(email,password);
+		
 		if(user==null) {
+			System.out.println(user.getEmail());
+			HttpSession session = request.getSession();
+			session.setAttribute("loginMessage", "Invalid username or password.");
+		    session.setAttribute("messageType", "error");
 			request.getRequestDispatcher("index.jsp").forward(request, response);
 			
 		}else
 		{
 			HttpSession session = request.getSession();
+			session.setAttribute("loginMessage", "Login successful!");
+		    session.setAttribute("messageType", "success");
 			session.setAttribute("loggedInUser", user);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("home.jsp");
 			dispatcher.forward(request, response);

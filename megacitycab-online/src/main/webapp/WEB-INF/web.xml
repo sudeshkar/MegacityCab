@@ -36,6 +36,18 @@
   	<description></description>
   	<servlet-class>com.megacitycabs.controller.LogoutController</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>CustomerController</servlet-name>
+  	<display-name>CustomerController</display-name>
+  	<description></description>
+  	<servlet-class>com.megacitycabs.controller.CustomerController</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>BookCab</servlet-name>
+  	<display-name>BookCab</display-name>
+  	<description></description>
+  	<servlet-class>com.megacitycabs.controller.BookCab</servlet-class>
+  </servlet>
    <servlet-mapping>
   	<servlet-name>RegisterController</servlet-name>
   	<url-pattern>/RegisterController</url-pattern>
@@ -57,6 +69,14 @@
   <servlet-mapping>
   	<servlet-name>LogoutController</servlet-name>
   	<url-pattern>/logout</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>CustomerController</servlet-name>
+  	<url-pattern>/CustomerController</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>BookCab</servlet-name>
+  	<url-pattern>/BookCab</url-pattern>
   </servlet-mapping>
    
 </web-app>

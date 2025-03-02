@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,8 +27,8 @@ a:hover {
         <div style="flex: 1; max-width: 200px; margin-bottom: 30px;">
             <h4 style="color: #f9d342;">Quick Links</h4>
             <ul style="list-style: none; padding: 0; color: #dcdcdc;">
-                <li><a href="home.jsp" style="color: #dcdcdc; text-decoration: none; transition: color 0.3s;">Home</a></li>
-                <li><a href="/book" style="color: #dcdcdc; text-decoration: none; transition: color 0.3s;">Book a Ride</a></li>
+                <li><a href="<c:url value='/home.jsp'/>" style="color: #dcdcdc; text-decoration: none; transition: color 0.3s;">Home</a></li>
+                <li><a href="<c:url value='/BookingController/list'/>" style="color: #dcdcdc; text-decoration: none; transition: color 0.3s;">Book a Ride</a></li>
                 <li><a href="/faq" style="color: #dcdcdc; text-decoration: none; transition: color 0.3s;">FAQ</a></li>
                 <li><a href="/contact" style="color: #dcdcdc; text-decoration: none; transition: color 0.3s;">Contact Us</a></li>
                 <li><a href="/terms" style="color: #dcdcdc; text-decoration: none; transition: color 0.3s;">Terms & Conditions</a></li>

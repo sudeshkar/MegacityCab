@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,7 +11,7 @@
 <body>
 <div class="container">
         <h2>User Registration</h2>
-        <form action="register" method="POST">
+        <form action="<c:url value='/RegisterController' />" method="POST">
             <div class="form-group">
                 <label>User Type<span class="required">*</span></label>
                 <div class="radio-group">
@@ -62,7 +63,7 @@
 
                 <div class="form-group">
                     <label for="experience">Address<span class="required">*</span></label>
-                    <input type="text" id="experience" name="experience">
+                    <input type="text" id="address" name="address">
                 </div>
             </div>
 

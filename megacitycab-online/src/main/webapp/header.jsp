@@ -1,3 +1,4 @@
+<%@page import="com.megacitycab.model.UserRole"%>
 <%@page import="com.megacitycab.model.User"%>
 <%@page import="com.megacitycab.utils.SessionUtils"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -26,12 +27,14 @@ if (SessionUtils.isUserLoggedIn(request)) {
     <header>
         <nav>
             <ul class="nav-list">
-            	<li><a href="home.jsp"> MEGACITY Cabs <br><%= (loggedInUser != null) ? loggedInUser.getName() : "Guest" %>!</a></li>
+            	<li><a href="<c:url value='/home.jsp'/>"> MEGACITY Cabs <br><%= (loggedInUser != null) ? loggedInUser.getName() : "Guest" %>!</a></li>
                 <li><a href="<c:url value='/home.jsp'/>"> Home</a></li>
-                <li><a href="<c:url value='/BookCab.jsp'/>">Book a Cab</a></li>
+                <% if (loggedInUser == null || !loggedInUser.getRole().toString().equals("DRIVER")) { %>
+           			 <li><a href="<c:url value='/BookCab'/>">Book Cab</a></li>
+        			<% } %>
                 <li><a href="<c:url value='/BookingController/list'/>">Manage Booking</a></li>
                 <li><a href="viewBookingStatus.jsp">Booking Status</a></li>
-                <li><a href="">About Us</a></li>
+                <li><a href="<c:url value='/AboutUs.jsp'/>">About Us</a></li>
                 <li><a href="help.jsp">Help</a></li>
                 <li><a href="<c:url value='/logout'/>" > Logout</a></li>
             </ul>
