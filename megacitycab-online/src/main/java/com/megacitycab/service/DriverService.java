@@ -9,11 +9,11 @@ import com.megacitycab.model.Driver;
 public class DriverService {
 	private static DriverService instance;
 	private DriverDAO driverDAO;
-	
+
 	private DriverService() {
 		this.driverDAO = new DriverDAOImplementation();
 	}
-	
+
 	public static DriverService getInstance() {
 		if (instance == null) {
             synchronized (BookingService.class) {
@@ -24,26 +24,26 @@ public class DriverService {
         }
         return instance;
 	}
-	
+
 	public List<Driver> getAllDrivers(){
 		return driverDAO.getAllDrivers();
 	}
-	
+
 	public Driver getDriverByID(int driverid) {
 		return driverDAO.getDriverById(driverid);
 	}
 	public boolean addDriver(Driver driver) {
 		return driverDAO.addDriver(driver);
 	}
-	
+
 	public Driver getDriverByEmail(String email) {
 		return driverDAO.getDriverByEmail(email);
 	}
-	
+
 	public boolean updateDriver(Driver driver) {
 		return driverDAO.updateDriver(driver);
 	}
-	
+
 	public boolean deleteDriver(int userid) {
 		return driverDAO.deleteDriver(userid);
 	}

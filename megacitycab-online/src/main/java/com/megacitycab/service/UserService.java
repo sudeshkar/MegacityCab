@@ -9,11 +9,11 @@ import com.megacitycab.model.User;
 public class UserService {
 	private static UserService instance;
 	private UserDAO userDAO ;
-	
+
 	private UserService() {
 		this.userDAO = new UserDAOImplementation();
 	}
-	
+
 	public static UserService getInstance() {
 		if (instance == null) {
 			synchronized (UserService.class) {
@@ -24,14 +24,14 @@ public class UserService {
 		}
 		return instance;
 	}
-	
+
 	public boolean addUser(User user) {
 		return userDAO.addUser(user);
 	}
 	public User getUserById(int userid) {
 		return userDAO.getUserById(userid);
 	}
-	
+
 	public User getUserByEmail(String email) {
 		return userDAO.getUserByEmail(email);
 	}
@@ -44,5 +44,5 @@ public class UserService {
 	public boolean deleteUser(int userid) {
 		return userDAO.deleteUser(userid);
 	}
-	
+
 }

@@ -3,7 +3,6 @@ package com.megacitycab.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,32 +13,32 @@ import com.megacitycab.model.User;
 import com.megacitycab.model.UserRole;
 
 public class CustomerDAOImplementation implements CustomerDAO{
-	
+
 	private UserDAO userDAO = new UserDAOImplementation();
 	private Connection connection;
 	public CustomerDAOImplementation(Connection conn) {
 		this.connection =conn;
-		 
+
 	}
-	
+
 	public CustomerDAOImplementation() {
 
 	}
 	public CustomerDAOImplementation(Connection conn,UserDAO userDAO) {
 		this.connection =conn;
 		this.userDAO = userDAO;
-		 
+
 	}
 	public CustomerDAOImplementation(UserDAO userDAO ) {
-        this.userDAO = new UserDAOImplementation(connection); 
+        this.userDAO = new UserDAOImplementation(connection);
     }
-	
+
 
 	@Override
 	public boolean addCustomer(Customer customer) {
 		User user = userDAO.getUserById(customer.getUserID());
 	    if (user == null || !user.getRole().toString().equalsIgnoreCase("Customer")) {
-	        return false; 
+	        return false;
 	    }
 	    String sql = "INSERT INTO customer (name, address, mobileNumber, phoneNumber, registrationDate, status, userID) " +
 	                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -51,9 +50,9 @@ public class CustomerDAOImplementation implements CustomerDAO{
 	        ps.setString(2, customer.getAddress());
 	        ps.setString(3, customer.getMobilenumber());
 	        ps.setString(4, customer.getPhonenumber());
-	        ps.setTimestamp(5, Timestamp.valueOf(customer.getRegistrationDate())); 
-	        ps.setString(6, customer.getStatus().toString());  
-	        ps.setInt(7, customer.getUserID());  
+	        ps.setTimestamp(5, Timestamp.valueOf(customer.getRegistrationDate()));
+	        ps.setString(6, customer.getStatus().toString());
+	        ps.setInt(7, customer.getUserID());
 
 	        int rowsAffected = ps.executeUpdate();
 	        return rowsAffected > 0;
@@ -62,7 +61,7 @@ public class CustomerDAOImplementation implements CustomerDAO{
 	    }
 	    return false;
 	}
-	
+
 	@Override
 	public boolean createCustomer(Customer customer) {
 	    String sql = "INSERT INTO customer (name, address, mobileNumber, phoneNumber, registrationDate, status, userID) " +
@@ -75,9 +74,9 @@ public class CustomerDAOImplementation implements CustomerDAO{
 	        ps.setString(2, customer.getAddress());
 	        ps.setString(3, customer.getMobilenumber());
 	        ps.setString(4, customer.getPhonenumber());
-	        ps.setTimestamp(5, Timestamp.valueOf(customer.getRegistrationDate())); 
-	        ps.setString(6, customer.getStatus().toString());  
-	        ps.setInt(7, customer.getUserID());  
+	        ps.setTimestamp(5, Timestamp.valueOf(customer.getRegistrationDate()));
+	        ps.setString(6, customer.getStatus().toString());
+	        ps.setInt(7, customer.getUserID());
 
 	        int rowsAffected = ps.executeUpdate();
 	        return rowsAffected > 0;
@@ -92,7 +91,7 @@ public class CustomerDAOImplementation implements CustomerDAO{
 	public Customer getCustomerById(int customerID) {
 	    String sql = "SELECT * FROM customer WHERE customerID = ?";
 	    Customer customer = null;
-	    
+
 	    try (Connection connection = DBConnectionFactory.getConnection();
 	         PreparedStatement ps = connection.prepareStatement(sql)) {
 
@@ -102,7 +101,7 @@ public class CustomerDAOImplementation implements CustomerDAO{
 	                // Fetch associated user
 	                User user = userDAO.getUserById(rs.getInt("userID"));
 	                if (user != null) {
-	                    
+
 	                    	customer = new Customer();
 	                        customer.setCustomerID(rs.getInt("customerID"));
 	                        customer.setUserID(rs.getInt("userID"));
@@ -112,7 +111,7 @@ public class CustomerDAOImplementation implements CustomerDAO{
 	                        customer.setPhonenumber(rs.getString("phoneNumber"));
 	                        customer.setRegistrationDate(rs.getTimestamp("registrationDate").toLocalDateTime());
 	                        customer.setStatus(CustomerStatus.valueOf(rs.getString("status")));
-	                        
+
 	                }
 	                else {
 	                	System.out.println("User not found for userID: ");
@@ -122,14 +121,14 @@ public class CustomerDAOImplementation implements CustomerDAO{
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
-	    return customer;  
+	    return customer;
 	}
 
 
 	@Override
 	public List<Customer> getAllCustomer() {
-		List<Customer> customers = new ArrayList<Customer>();
-		
+		List<Customer> customers = new ArrayList<>();
+
 		List<User> allUsers = userDAO.getAllUsers();
 		if (allUsers.isEmpty()) {
 	        System.out.println("No users found in userDAOImplementation");
@@ -162,39 +161,39 @@ public class CustomerDAOImplementation implements CustomerDAO{
 						System.out.println("No customer found for userID: " + user.getUserID());
 					}
 				}
-				
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		if (customers.isEmpty()) {
 			System.out.println("Customer fetch failed in CustomerDAOImplementation");
 		}
 		return customers;
-		
+
 	}
 
 	@Override
 	public boolean updateCustomer(Customer customer) {
 	    String sql = "UPDATE customer SET address = ?, mobileNumber = ?, phoneNumber = ?, status = ? WHERE customerID = ?";
-	    
+
 	    try (Connection connection = DBConnectionFactory.getConnection();
 	         PreparedStatement ps = connection.prepareStatement(sql)) {
 
 	        ps.setString(1, customer.getAddress());
 	        ps.setString(2, customer.getMobilenumber());
 	        ps.setString(3, customer.getPhonenumber());
-	        ps.setString(4, customer.getStatus().toString());   
+	        ps.setString(4, customer.getStatus().toString());
 	        ps.setInt(5, customer.getCustomerID());
 
 	        int rowsAffected = ps.executeUpdate();
-	        return rowsAffected > 0;  
+	        return rowsAffected > 0;
 
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
-	    return false;  
+	    return false;
 	}
 
 
@@ -208,13 +207,13 @@ public class CustomerDAOImplementation implements CustomerDAO{
 	        ps.setInt(1, customerID);
 	        int rowsAffected = ps.executeUpdate();
 
-	        return rowsAffected > 0;  
+	        return rowsAffected > 0;
 
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
 
-	    return false; 
+	    return false;
 	}
 
 	@Override
@@ -222,7 +221,7 @@ public class CustomerDAOImplementation implements CustomerDAO{
 		String sql = "SELECT * FROM customer WHERE userID = ?";
 	    Customer customer = null;
 	    int userid = user.getUserID();
-	    
+
 	    try (Connection connection = DBConnectionFactory.getConnection();
 	         PreparedStatement ps = connection.prepareStatement(sql)) {
 
@@ -230,7 +229,7 @@ public class CustomerDAOImplementation implements CustomerDAO{
 	        try (ResultSet rs = ps.executeQuery()) {
 	            if (rs.next()) {
 	                // Fetch associated user
-	            	
+
 	                customer = new Customer();
 					customer.setCustomerID(rs.getInt("customerID"));
 					customer.setUserID(rs.getInt("userID"));
@@ -248,7 +247,7 @@ public class CustomerDAOImplementation implements CustomerDAO{
 	    if (customer == null) {
 	        throw new NullPointerException("Customer not found for user ID: " + userid);
 	    }
-	    return customer; 
+	    return customer;
 	}
 
 

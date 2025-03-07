@@ -7,7 +7,7 @@ public class Driver extends User{
 	private String phoneNumber;
 	private String address;
 	private DriverStatus driverStatus;
-	
+
 	public Driver(int driverID, int userID, String name, String email, UserRole role, String licenseNumber,
             String contactNumber, String phoneNumber, String address, DriverStatus driverStatus) {
 				  super(userID, name, email, role);
@@ -18,6 +18,7 @@ public class Driver extends User{
 				  this.address = address;
 				  this.driverStatus = driverStatus;
 				}
+	
 	public Driver(int userID, String name, String email, UserRole role, String licenseNumber,
             String contactNumber, String phoneNumber, String address) {
 				  super(userID, name, email, role);
@@ -49,10 +50,10 @@ public class Driver extends User{
         this.driverStatus = driverStatus;
     }
     public Driver() {
-  
+
     }
 
-	
+
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
@@ -71,7 +72,7 @@ public class Driver extends User{
 	public void setDriverID(int driverID) {
 		this.driverID = driverID;
 	}
-		
+
 
 	public String getLicenseNumber() {
 		return licenseNumber;

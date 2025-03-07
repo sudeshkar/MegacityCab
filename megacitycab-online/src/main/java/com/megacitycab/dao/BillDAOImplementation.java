@@ -1,12 +1,15 @@
 package com.megacitycab.dao;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.megacitycab.model.Bill;
-import com.megacitycab.model.Booking;
 import com.megacitycab.model.PaymentStatus;
 
 public class BillDAOImplementation implements BillDAO {
@@ -127,7 +130,8 @@ public class BillDAOImplementation implements BillDAO {
         }
     }
 
-    public List<Bill> getBillsByDateRange(LocalDateTime startDate, LocalDateTime endDate) throws SQLException {
+    @Override
+	public List<Bill> getBillsByDateRange(LocalDateTime startDate, LocalDateTime endDate) throws SQLException {
         List<Bill> bills = new ArrayList<>();
 //        String query = "SELECT * FROM bill WHERE billDate BETWEEN ? AND ?";
 //        try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -155,7 +159,8 @@ public class BillDAOImplementation implements BillDAO {
         return bills;
     }
 
-    public double getTotalRevenue() throws SQLException {
+    @Override
+	public double getTotalRevenue() throws SQLException {
         String query = "SELECT SUM(totalFare) as totalRevenue FROM bill WHERE paymentStatus = 'PAID'";
         try (PreparedStatement statement = connection.prepareStatement(query);
              ResultSet rs = statement.executeQuery()) {
@@ -189,7 +194,7 @@ public class BillDAOImplementation implements BillDAO {
 //                }
 //            }
 //        }
-        return null; 
+        return null;
     }
 
     @Override
@@ -217,7 +222,7 @@ public class BillDAOImplementation implements BillDAO {
 //                }
 //            }
 //        }
-        return bills;  
+        return bills;
     }
 
 }

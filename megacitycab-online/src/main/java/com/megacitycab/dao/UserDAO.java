@@ -3,7 +3,6 @@ package com.megacitycab.dao;
 import java.util.List;
 
 import com.megacitycab.model.User;
-import com.megacitycab.model.UserRole;
 
 public interface UserDAO {
 	 boolean addUser(User user);
@@ -12,10 +11,10 @@ public interface UserDAO {
 	 List<User> getAllUsers();
 	 boolean updateUser(User user);
 	 boolean deleteUser(int userId);
-	
+
 	User login(String email,String password);
-	
-	
+
+
 }
 
 

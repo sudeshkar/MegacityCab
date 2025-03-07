@@ -1,4 +1,4 @@
-package com.megacitycabs.controller;
+package com.megacitycab.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -17,8 +17,9 @@ import com.megacitycab.service.LoginService;
 @WebServlet("/Clogin")
 public class LoginController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+
 	private LoginService loginService;
+	@Override
 	public void init() {
 		try {
 			loginService = LoginService.getInstance();
@@ -27,32 +28,34 @@ public class LoginController extends HttpServlet {
 		}
 	}
 
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		
+
+
 	}
 
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		login(request,response);
-	
+
 	}
-	
+
 	private void login(HttpServletRequest request,HttpServletResponse response)throws ServletException, IOException {
 		User user = new User();
-		
+
 		String email = request.getParameter("email");
 		String password= request.getParameter("pswd");
 		user.setEmail(email);
 		user.setPassword(password);
 		user =loginService.login(email,password);
-		
+
 		if(user==null) {
 			System.out.println(user.getEmail());
 			HttpSession session = request.getSession();
 			session.setAttribute("loginMessage", "Invalid username or password.");
 		    session.setAttribute("messageType", "error");
 			request.getRequestDispatcher("index.jsp").forward(request, response);
-			
+
 		}else
 		{
 			HttpSession session = request.getSession();
@@ -62,7 +65,7 @@ public class LoginController extends HttpServlet {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("home.jsp");
 			dispatcher.forward(request, response);
 		}
-	
+
 	}
 
 }

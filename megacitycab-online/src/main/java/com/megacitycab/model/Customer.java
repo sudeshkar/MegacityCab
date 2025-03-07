@@ -36,11 +36,11 @@ public class Customer extends User{
 				this.mobilenumber = mobilenumber;
 				this.phonenumber = phonenumber;
 				this.registrationDate = registrationDate;
-				this.status = status ; 
+				this.status = status ;
 				}
 	public Customer() {
 				}
-	
+
 	public Customer(int customerID,int userID,String name, String password, String email, UserRole role,String address,String mobilenumber,CustomerStatus status,LocalDateTime registrationDate) {
 		super(userID,name, password, email, role);
 		this.customerID=customerID;
@@ -48,7 +48,7 @@ public class Customer extends User{
 		this.mobilenumber=mobilenumber;
 		this.status =status;
 		this.registrationDate =registrationDate;
-		
+
 	}
 	public Customer(int customerID, int userID, String name, String email, UserRole role, String address, String mobilenumber,LocalDateTime registrationDate,CustomerStatus status) {
         super(userID, name, email, role);

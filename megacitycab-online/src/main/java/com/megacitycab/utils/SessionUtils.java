@@ -13,7 +13,7 @@ public class SessionUtils {
         }
         return null;
     }
-	
+
 	public static boolean isUserLoggedIn(HttpServletRequest request) {
         return getLoggedInUser(request) != null;
     }
@@ -21,7 +21,7 @@ public class SessionUtils {
     public static void logoutUser(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
-        	session.removeAttribute("loggedInUser");	
+        	session.removeAttribute("loggedInUser");
             session.invalidate();
         }
     }

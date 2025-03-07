@@ -20,7 +20,7 @@ public class Cab {
 	public void setCabID(int cabID) {
 		this.cabID = cabID;
 	}
-	
+
 	public Cab() {
 	}
 	public Cab(int cabID, String vehicleNumber, String model, CabCategory category, int capacity,
@@ -49,7 +49,7 @@ public class Cab {
 			this.cabStatus= cabStatus;
 
 	}
-	
+
 	public Cab(int cabID,String vehicleNumber,String model,CabCategory category,int capacity,String currentLocation,
 			CabStatus cabStatus) {
 			this.cabID=cabID;

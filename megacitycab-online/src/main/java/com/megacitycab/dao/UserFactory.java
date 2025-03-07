@@ -18,14 +18,14 @@ public class UserFactory {
             case CUSTOMER:
                 return new Customer(
                     rs.getInt("customerID"),
-                    rs.getInt("userID"), 
+                    rs.getInt("userID"),
                     rs.getString("userName"),
                     rs.getString("password"),
                     rs.getString("email"),
                     UserRole.valueOf(rs.getString("role")),
                     rs.getString("address"),
                     rs.getString("mobileNumber"),
-                    rs.getString("phoneNumber"), 
+                    rs.getString("phoneNumber"),
                     rs.getTimestamp("registrationDate").toLocalDateTime()
                 );
 
@@ -45,7 +45,7 @@ public class UserFactory {
                 );
 
             default:
-               
+
                 return new User(
                     rs.getInt("userID"),
                     rs.getString("userName"),
@@ -55,7 +55,7 @@ public class UserFactory {
                 );
         }
     }
-    
+
     public static User setUser(Resultset rs) throws SQLException{
     	return null;
     }

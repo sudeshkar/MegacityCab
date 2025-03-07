@@ -12,49 +12,49 @@ public class Booking {
 	private BookingStatus status;
 	private Cab cab;
 	private Driver driver;
-	
+
 	//for new booking
-	public Booking(Customer customer, LocalDateTime bookingDateTime, 
-            String pickupLocation, String destination, double distance 
+	public Booking(Customer customer, LocalDateTime bookingDateTime,
+            String pickupLocation, String destination, double distance
             , Cab cab, Driver driver) {
 		 this.customer = customer;
 		 this.bookingDateTime = bookingDateTime;
 		 this.pickupLocation = pickupLocation;
 		 this.destination = destination;
 		 this.distance = distance;
-		 this.status = BookingStatus.PENDING; 
+		 this.status = BookingStatus.PENDING;
 		 this.cab = cab;
 		 this.driver = driver;
 		}
-	
-	public Booking(int bookingNumber, Customer customer, String pickupLocation, 
+
+	public Booking(int bookingNumber, Customer customer, String pickupLocation,
             String destination, double distance, Cab cab, Driver driver) {
 			 this.bookingNumber = bookingNumber;
 			 this.customer = customer;
-			 this.bookingDateTime = LocalDateTime.now(); 
-			 this.status = BookingStatus.PENDING; 
+			 this.bookingDateTime = LocalDateTime.now();
+			 this.status = BookingStatus.PENDING;
 			 this.pickupLocation = pickupLocation;
 			 this.destination = destination;
 			 this.distance = distance;
 			 this.cab = cab;
 			 this.driver = driver;
 			}
-	public Booking(Customer customer, String pickupLocation, 
+	public Booking(Customer customer, String pickupLocation,
             String destination, double distance, Cab cab, Driver driver) {
 			 this.customer = customer;
-			 this.bookingDateTime = LocalDateTime.now(); 
-			 this.status = BookingStatus.PENDING; 
+			 this.bookingDateTime = LocalDateTime.now();
+			 this.status = BookingStatus.PENDING;
 			 this.pickupLocation = pickupLocation;
 			 this.destination = destination;
 			 this.distance = distance;
 			 this.cab = cab;
 			 this.driver = driver;
 			}
-	
-	
-	//for fetching existing booking from DB 
-	public Booking(int bookingNumber, Customer customer, LocalDateTime bookingDateTime, 
-            String pickupLocation, String destination, double distance, 
+
+
+	//for fetching existing booking from DB
+	public Booking(int bookingNumber, Customer customer, LocalDateTime bookingDateTime,
+            String pickupLocation, String destination, double distance,
             BookingStatus status, Cab cab, Driver driver) {
 		 this.bookingNumber = bookingNumber;
 		 this.customer = customer;
@@ -62,15 +62,15 @@ public class Booking {
 		 this.pickupLocation = pickupLocation;
 		 this.destination = destination;
 		 this.distance = distance;
-		 this.status = status; 
+		 this.status = status;
 		 this.cab = cab;
 		 this.driver = driver;
 		}
 	public Booking() {
-		
+
 	}
-	
-	
+
+
 
 	public int getBookingNumber() {
 		return bookingNumber;

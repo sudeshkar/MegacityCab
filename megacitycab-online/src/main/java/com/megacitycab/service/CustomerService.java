@@ -10,11 +10,11 @@ import com.megacitycab.model.User;
 public class CustomerService {
 	private static CustomerService instance;
 	private CustomerDAO customerDAO;
-	
+
 	private CustomerService() {
 		this.customerDAO = new CustomerDAOImplementation();
 	}
-	
+
 	public static CustomerService getInstance() {
 		if (instance == null) {
             synchronized (BookingService.class) {
@@ -25,23 +25,23 @@ public class CustomerService {
         }
         return instance;
 	}
-	
+
 	public List<Customer> getAllCustomers(){
-		
+
 		return customerDAO.getAllCustomer();
 	}
-	
+
 	public Customer getCustomerByID(int customerid) {
 		return customerDAO.getCustomerById(customerid);
 	}
-	
+
 	public Customer getCustomerByUserId(User user) {
 		return customerDAO.getCustomerByuserID(user);
 	}
 	public boolean addCustomer(Customer customer) {
 		return customerDAO.addCustomer(customer);
 	}
-	
+
 	public boolean updateCustomer(Customer customer) {
 		return customerDAO.updateCustomer(customer);
 	}

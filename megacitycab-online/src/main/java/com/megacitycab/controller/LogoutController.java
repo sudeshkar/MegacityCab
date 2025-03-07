@@ -1,32 +1,28 @@
-package com.megacitycabs.controller;
+package com.megacitycab.controller;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.megacitycab.model.Customer;
-import com.megacitycab.service.CustomerService;
+import com.megacitycab.utils.SessionUtils;
 
-public class CustomerController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	
-	private CustomerService customerService;
-	
-	public void init() {
-		customerService = CustomerService.getInstance();
-		}
-	
 
+public class LogoutController extends HttpServlet {
+private static final long serialVersionUID = 1L;
+
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
-	
+
+		SessionUtils.logoutUser(request);
+        response.sendRedirect("index.jsp");
 	}
+
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		doGet(request, response);
 	}
 

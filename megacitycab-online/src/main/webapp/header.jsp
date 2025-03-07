@@ -33,7 +33,9 @@ if (SessionUtils.isUserLoggedIn(request)) {
            			 <li><a href="<c:url value='/BookCab'/>">Book Cab</a></li>
         			<% } %>
                 <li><a href="<c:url value='/BookingController/list'/>">Manage Booking</a></li>
-                <li><a href="viewBookingStatus.jsp">Booking Status</a></li>
+                <% if (loggedInUser.getRole().toString().equals("ADMIN")) { %>
+           			 <li><a href="<c:url value='/AddCabController'/>">Add Cab</a></li>
+        			<% } %>
                 <li><a href="<c:url value='/AboutUs.jsp'/>">About Us</a></li>
                 <li><a href="help.jsp">Help</a></li>
                 <li><a href="<c:url value='/logout'/>" > Logout</a></li>

@@ -11,7 +11,7 @@ public  class User {
 	private UserRole role;
 	private Timestamp lastLogindate;
 	public User() {
-		
+
 	}
 
 	public User(int userID, String name, String email, UserRole role) {

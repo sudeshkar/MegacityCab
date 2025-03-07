@@ -26,9 +26,9 @@ public class LoginService {
         }
         return instance;
     }
-    
+
     public User login(String email,String password){
     	return userDAO.login(email, password);
     }
-    
+
 }

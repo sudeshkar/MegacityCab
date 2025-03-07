@@ -22,13 +22,13 @@ public class DriverDAOImplementation implements DriverDAO{
 		try {
 			this.conn = DBConnectionFactory.getConnection();
 		} catch (SQLException e) {
-			 
+
 			e.printStackTrace();
 		}
 		this.userDAO = new UserDAOImplementation();
     }
 
-	
+
 	private Connection conn;
 	public DriverDAOImplementation(Connection conn) {
 		this.conn=conn;
@@ -37,18 +37,18 @@ public class DriverDAOImplementation implements DriverDAO{
 	@Override
 	public boolean addDriver(Driver driver) {
 		String sql = "INSERT INTO driver (name, licenseNumber, contactNumber, phoneNumber, address, status) VALUES (?, ?, ?, ?)";
-	    
-	    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-	        
-	        ps.setString(1, driver.getName());  
-	        ps.setString(2, driver.getLicenseNumber());  
-	        ps.setString(3, driver.getContactNumber());  
-	        ps.setString(4, driver.getPhoneNumber());  
-	        ps.setString(5, driver.getAddress());  
-	        ps.setString(6, driver.getDriverStatus().name());  
-	        ps.setInt(7, driver.getUserID()); 
 
-	        
+	    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+	        ps.setString(1, driver.getName());
+	        ps.setString(2, driver.getLicenseNumber());
+	        ps.setString(3, driver.getContactNumber());
+	        ps.setString(4, driver.getPhoneNumber());
+	        ps.setString(5, driver.getAddress());
+	        ps.setString(6, driver.getDriverStatus().name());
+	        ps.setInt(7, driver.getUserID());
+
+
 	        int rowsAffected = ps.executeUpdate();
 	        return rowsAffected > 0;
 	    } catch (Exception e) {
@@ -62,11 +62,11 @@ public class DriverDAOImplementation implements DriverDAO{
 		String sql = "SELECT * FROM driver WHERE driverID = ?";
 	    Driver driver = null;
 	    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-	         
+
 	        ps.setInt(1, driverId);
 	        try (ResultSet rs = ps.executeQuery()) {
 	            if (rs.next()) {
-	                
+
 	                driver = new Driver();
 	                driver.setDriverID(rs.getInt("driverID"));
 	                driver.setName(rs.getString("name"));
@@ -74,8 +74,8 @@ public class DriverDAOImplementation implements DriverDAO{
 	                driver.setContactNumber(rs.getString("contactNumber"));
 	                driver.setPhoneNumber(rs.getString("phoneNumber"));
 	                driver.setAddress(rs.getString("address"));
-	                driver.setDriverStatus(DriverStatus.valueOf(rs.getString("status")));;
-	                driver.setUserID(rs.getInt("userId"));  
+	                driver.setDriverStatus(DriverStatus.valueOf(rs.getString("status")));
+	                driver.setUserID(rs.getInt("userId"));
 	            }
 	        }
 	    } catch (Exception e) {
@@ -88,17 +88,14 @@ public class DriverDAOImplementation implements DriverDAO{
 	@Override
 	public Driver getDriverByEmail(String email) {
 		User user = userDAO.getUserByEmail(email);
-		if (user == null) {
-            return null; 
-        }
-		if (!user.getRole().toString().equalsIgnoreCase("Driver")) {
-	        return null; 
+		if ((user == null) || !user.getRole().toString().equalsIgnoreCase("Driver")) {
+	        return null;
 	    }
 		String sql = "SELECT * FROM driver WHERE userID = ?";
 		try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, user.getUserID());
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) { 
+                if (rs.next()) {
                     return new Driver(
                     	rs.getInt("driverID"),
                         user.getUserID(),
@@ -117,18 +114,18 @@ public class DriverDAOImplementation implements DriverDAO{
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null; 
-    
+        return null;
+
 	}
 
 	@Override
 	public List<Driver> getAllDrivers() {
-		 List<Driver> drivers = new ArrayList<Driver>();
+		 List<Driver> drivers = new ArrayList<>();
 
-	        
-	        List<User> allUsers = userDAO.getAllUsers();
 
-	        
+		 	List<User> allUsers = userDAO.getAllUsers();
+
+
 	        String sql = "SELECT * FROM driver WHERE userID = ?";
 
 	        try (	Connection conn =DBConnectionFactory.getConnection();
@@ -136,7 +133,7 @@ public class DriverDAOImplementation implements DriverDAO{
 	            for (User user : allUsers) {
 	                ps.setInt(1, user.getUserID());
 	                try (ResultSet rs = ps.executeQuery()) {
-	                    if (rs.next()) {  
+	                    if (rs.next()) {
 	                        Driver driver = new Driver(
 	                        	rs.getInt("driverID"),
 	                        	user.getUserID(),
@@ -150,6 +147,7 @@ public class DriverDAOImplementation implements DriverDAO{
 	                            rs.getString("address"),
 	                            DriverStatus.valueOf(rs.getString("status"))
 	                        );
+	                       
 	                        drivers.add(driver);
 	                    }
 	                }
@@ -165,7 +163,7 @@ public class DriverDAOImplementation implements DriverDAO{
 	public boolean updateDriver(Driver driver) {
 		boolean userUpdated = userDAO.updateUser(driver);
 		if(!userUpdated) {
-	        return false; 
+	        return false;
 	    }
 		String sql = "UPDATE driver SET licenseNumber = ?, contactNumber = ?, phoneNumber = ?, address = ?, status = ? WHERE userID = ?";
 		try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -173,7 +171,7 @@ public class DriverDAOImplementation implements DriverDAO{
 	        ps.setString(2, driver.getContactNumber());
 	        ps.setString(3, driver.getPhoneNumber());
 	        ps.setString(4, driver.getAddress());
-	        ps.setString(5, driver.getDriverStatus().toString());  
+	        ps.setString(5, driver.getDriverStatus().toString());
 	        ps.setInt(6, driver.getUserID());
 
 	        int rowsAffected = ps.executeUpdate();
@@ -186,7 +184,7 @@ public class DriverDAOImplementation implements DriverDAO{
 
 	@Override
 	public boolean deleteDriver(int userID) {
-	    
+
 	    String roleCheckQuery = "SELECT role FROM users WHERE userID = ?";
 	    try (PreparedStatement ps = conn.prepareStatement(roleCheckQuery)) {
 	        ps.setInt(1, userID);
@@ -194,10 +192,10 @@ public class DriverDAOImplementation implements DriverDAO{
 	            if (rs.next()) {
 	                String role = rs.getString("role");
 	                if (!"Driver".equalsIgnoreCase(role)) {
-	                    return false;  
+	                    return false;
 	                }
 	            } else {
-	                return false; 
+	                return false;
 	            }
 	        }
 	    } catch (Exception e) {
@@ -205,15 +203,15 @@ public class DriverDAOImplementation implements DriverDAO{
 	        return false;
 	    }
 
-	    
+
 	    String deleteDriverQuery = "DELETE FROM driver WHERE userID = ?";
 	    try (PreparedStatement ps = conn.prepareStatement(deleteDriverQuery)) {
 	        ps.setInt(1, userID);
 	        int rowsAffected = ps.executeUpdate();
-	        
-	        
+
+
 	        if (rowsAffected > 0) {
-	            return deleteUser(userID); 
+	            return deleteUser(userID);
 	        }
 	    } catch (Exception e) {
 	        e.printStackTrace();
@@ -226,7 +224,7 @@ public class DriverDAOImplementation implements DriverDAO{
 	    try (PreparedStatement ps = conn.prepareStatement(deleteUserQuery)) {
 	        ps.setInt(1, userID);
 	        int rowsAffected = ps.executeUpdate();
-	        return rowsAffected > 0; 
+	        return rowsAffected > 0;
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }

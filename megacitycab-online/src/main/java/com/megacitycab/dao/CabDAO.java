@@ -11,5 +11,6 @@ public interface CabDAO {
 	 List<Cab> getAllCabs();
 	 boolean updateCab(Cab Cab);
 	 boolean deleteCab(int Cabid);
-   
+	 public boolean hasActiveCabBookings(int cabID);
+
 }

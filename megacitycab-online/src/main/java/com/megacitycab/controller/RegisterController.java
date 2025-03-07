@@ -1,6 +1,7 @@
-package com.megacitycabs.controller;
+package com.megacitycab.controller;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,20 +20,23 @@ import com.megacitycab.service.UserService;
 public class RegisterController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private UserService userService;
-	
+
+	@Override
 	public void init() {
 		userService = UserService.getInstance();
 	}
 
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		request.getRequestDispatcher("/Register.jsp").forward(request, response);
 	}
 
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		registerUser(request,response);
 	}
-	
+
 	public void registerUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String userType =request.getParameter("userType");
 		String userName = request.getParameter("username");
@@ -43,7 +47,7 @@ public class RegisterController extends HttpServlet {
 			UserRole userRole = UserRole.CUSTOMER;
 			User user = new User(userName,email,userRole,password);
 			boolean addUser=userService.addUser(user);
-			if (addUser== true) {
+			if (addUser) {
 				System.out.println("User Created ");
 			}
 			else {
@@ -61,13 +65,13 @@ public class RegisterController extends HttpServlet {
 					);
 			CustomerService customerService = CustomerService.getInstance();
 			boolean addcustomer =customerService.addCustomer(customer);
-			if (addcustomer == true) {
+			if (addcustomer) {
 				System.out.println("Customer Added Successfully");
 			}
 			else {
 				System.out.println("failed to add Customer");
 			}
-		
+
 		}
 		else {
 			UserRole userRole = UserRole.DRIVER;
@@ -85,7 +89,7 @@ public class RegisterController extends HttpServlet {
 					);
 			DriverService driverService = DriverService.getInstance();
 			boolean addDriver =driverService.addDriver(driver);
-			if (addDriver == true) {
+			if (addDriver) {
 				System.out.println("Driver Added Successfully");
 			}
 			else {
@@ -94,12 +98,13 @@ public class RegisterController extends HttpServlet {
 		}
 		response.sendRedirect(request.getContextPath() + "/index.jsp");
 	}
-	
+
 	@WebServlet("/LoginRedirect")
     public static class LoginRedirectController extends HttpServlet {
         private static final long serialVersionUID = 1L;
-        protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-           
+        @Override
+		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
             response.sendRedirect(request.getContextPath() + "/index.jsp");
         }
     }

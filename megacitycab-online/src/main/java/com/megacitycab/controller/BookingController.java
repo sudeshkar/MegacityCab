@@ -1,13 +1,11 @@
-package com.megacitycabs.controller;
+package com.megacitycab.controller;
 
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -30,21 +28,22 @@ public class BookingController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private BookingService bookingService;
-	
+
+	@Override
 	public void init() throws ServletException{
 		bookingService = BookingService.getInstance();
 	}
-	
-	
+
+
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		if (!SessionUtils.isUserLoggedIn(request)) {
-            response.sendRedirect("index.jsp");  
+            response.sendRedirect("index.jsp");
             return;
         }
 		String pathInfo = request.getPathInfo();
 		System.out.println("PathInfo: " + pathInfo);
-	    
+
 		if (pathInfo == null ||pathInfo.equals("/list")) {
 	        try {
 				listBookings(request, response);
@@ -59,22 +58,21 @@ public class BookingController extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if (!SessionUtils.isUserLoggedIn(request)) {
-            response.sendRedirect("index.jsp");  
+            response.sendRedirect("index.jsp");
             return;
         }
-		
 		String action = request.getParameter("action");
 		if (action.equals("addBooking")) {
 			addbooking(request, response);
 		}
-		
+		System.out.println("Nothing");
 		response.sendRedirect(request.getContextPath() + "/BookingController/list");
-		
+
 	}
-	
+
 	private void listBookings(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
-    	List<Booking> bookingList = new ArrayList<Booking>();
+
+    	List<Booking> bookingList = new ArrayList<>();
 		try {
 			User LoggedInUser = SessionUtils.getLoggedInUser(request);
 			String userRole = LoggedInUser.getRole().toString();
@@ -96,7 +94,7 @@ public class BookingController extends HttpServlet {
 			}else {
 			bookingList = bookingService.getAllBookings();
 			request.setAttribute("bookings", bookingList);
-			CustomerService customerService = CustomerService.getInstance();  
+			CustomerService customerService = CustomerService.getInstance();
             List<Customer> customers = customerService.getAllCustomers();
             DriverService driverService = DriverService.getInstance();
             List<Driver> drivers = driverService.getAllDrivers();
@@ -111,10 +109,10 @@ public class BookingController extends HttpServlet {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database error occurred");
 		}
-    	
-       
+
+
     }
-	
+
 	public void addbooking(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		int customerID = Integer.parseInt(request.getParameter("customerID"));
         String pickupLocation = request.getParameter("pickupLocation");
@@ -123,7 +121,7 @@ public class BookingController extends HttpServlet {
         int cabID = Integer.parseInt(request.getParameter("cabID"));
         int driverID = Integer.parseInt(request.getParameter("driverID"));
 
-      
+
         CustomerService customerService = CustomerService.getInstance();
         Customer customer =customerService.getCustomerByID(customerID);
         System.out.println(customerID);
@@ -131,16 +129,16 @@ public class BookingController extends HttpServlet {
         CabService cabService = CabService.getInstance();
         Cab cab = cabService.getCabByCabID(cabID);
         System.out.println(cabID);
-        
+
         DriverService driverService = DriverService.getInstance();
         Driver driver = driverService.getDriverByID(driverID);
         System.out.println(driverID);
-        
+
         Booking booking = new Booking(
         		customer,pickupLocation,destination,distance,cab,
         		driver);
         bookingService.addBooking(booking);
-       
+
 
 	}
 

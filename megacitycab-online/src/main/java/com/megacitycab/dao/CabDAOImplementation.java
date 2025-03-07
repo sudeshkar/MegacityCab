@@ -15,9 +15,9 @@ import com.megacitycab.model.CabStatus;
 import com.megacitycab.model.Driver;
 
 public class CabDAOImplementation implements CabDAO{
-	
+
 	private Connection conn;
-    private DriverDAO driverDAO;  
+    private DriverDAO driverDAO;
 
     public CabDAOImplementation(Connection conn, DriverDAO driverDAO) {
     	this.conn= conn;
@@ -26,12 +26,12 @@ public class CabDAOImplementation implements CabDAO{
     public CabDAOImplementation() {
     	this.driverDAO = new DriverDAOImplementation();
     }
-	
+
 	@Override
 	public boolean addCab(Cab cab) {
 		String query = "INSERT INTO cab (vehicleNumber, model, category,capacity,currentLocation,status,lastUpdated,driverID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try 
+        try
         {   Connection connection = DBConnectionFactory.getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, cab.getVehicleNumber());
@@ -44,51 +44,56 @@ public class CabDAOImplementation implements CabDAO{
             statement.setInt(8, cab.getDriver().getDriverID());
             int rowinserted= statement.executeUpdate();
             return rowinserted > 0;
-        } 
-        catch (SQLException e) 
+        }
+        catch (SQLException e)
         {
         	System.err.println("Error adding cab: " + e.getMessage());
             return false;
         }
-        
-		
+
+
 	}
 
 	@Override
 	public Cab getCabById(int cabId) {
 	    String query = "SELECT * FROM cab WHERE cabID = ?";
-	    
+
 	    try (Connection connection = DBConnectionFactory.getConnection();
 	         PreparedStatement statement = connection.prepareStatement(query)) {
 
 	        statement.setInt(1, cabId);
-	        ResultSet resultSet = statement.executeQuery(); 
+	        ResultSet rs = statement.executeQuery();
 
-	        if (resultSet.next()) {
-	            Cab cab = new Cab();
-	            cab.setCabID(resultSet.getInt("cabID"));
-	            cab.setVehicleNumber(resultSet.getString("vehicleNumber"));
-	            cab.setModel(resultSet.getString("model"));
-	            cab.setCategory(CabCategory.valueOf(resultSet.getString("category").toUpperCase())); 
-	            cab.setCapacity(resultSet.getInt("capacity"));
-	            cab.setCurrentLocation(resultSet.getString("currentLocation"));
-	            cab.setCabStatus(CabStatus.valueOf(resultSet.getString("status"))); 
-	            cab.setLastUpdated(resultSet.getTimestamp("lastUpdated").toLocalDateTime());
+	        if (rs.next()) {
+	        	Driver driver = driverDAO.getDriverById(rs.getInt("driverID"));
+	        	Cab cab = new Cab(
+	            		rs.getInt("cabID"),
+	                    rs.getString("vehicleNumber"),
+	                    rs.getString("model"),
+	                    CabCategory.valueOf(rs.getString("category").toString()),
+	                    rs.getInt("capacity"),
+	                    rs.getString("currentLocation"),
+	                    CabStatus.valueOf(rs.getString("status").toString()),
+	                    rs.getTimestamp("lastUpdated").toLocalDateTime(),
+	                    driver
 
-	             
-	         
+	            );
 
-	            return cab;  
+
+
+
+	            return cab;
 	        }
 	    } catch (SQLException e) {
 	        System.err.println("Error fetching cab: " + e.getMessage());
 	    }
-	    return null;  
+	    return null;
 	}
 
 
+	@Override
 	public List<Cab> getAllCabs() {
-	    List<Cab> cabs = new ArrayList<Cab>();
+	    List<Cab> cabs = new ArrayList<>();
 	    String sql = "SELECT * FROM cab";
 
 	    try ( Connection connection = DBConnectionFactory.getConnection();
@@ -101,13 +106,13 @@ public class CabDAOImplementation implements CabDAO{
 	            		rs.getInt("cabID"),
 	                    rs.getString("vehicleNumber"),
 	                    rs.getString("model"),
-	                    CabCategory.valueOf(rs.getString("category").toString()),  
+	                    CabCategory.valueOf(rs.getString("category").toString()),
 	                    rs.getInt("capacity"),
 	                    rs.getString("currentLocation"),
-	                    CabStatus.valueOf(rs.getString("status").toString()),  
-	                    rs.getTimestamp("lastUpdated").toLocalDateTime(), 
+	                    CabStatus.valueOf(rs.getString("status").toString()),
+	                    rs.getTimestamp("lastUpdated").toLocalDateTime(),
 	                    driver
-	                      
+
 	            );
 	            cabs.add(cab);
 	        }
@@ -116,12 +121,12 @@ public class CabDAOImplementation implements CabDAO{
 	    }
 	    return cabs;
 	}
-	
+
 	@Override
 	public boolean updateCab(Cab cab) {
 	    String sql = "UPDATE cab SET vehicleNumber = ?, model = ?, category = ?, capacity = ?, " +
-	                 "currentLocation = ?, cabStatus = ?, lastUpdated = ?, driverID = ? WHERE cabID = ?";
-	    
+	                 "currentLocation = ?, status = ?, lastUpdated = ?, driverID = ? WHERE cabID = ?";
+
 	    try (Connection connection = DBConnectionFactory.getConnection();
 	         PreparedStatement ps = connection.prepareStatement(sql)) {
 
@@ -131,8 +136,8 @@ public class CabDAOImplementation implements CabDAO{
 	        ps.setInt(4, cab.getCapacity());
 	        ps.setString(5, cab.getCurrentLocation());
 	        ps.setString(6, cab.getCabStatus().toString());
-	        ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));  
-	        ps.setInt(8, cab.getDriver().getDriverID()); 
+	        ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
+	        ps.setInt(8, cab.getDriver().getDriverID());
 	        ps.setInt(9, cab.getCabID());
 
 	        int rowsAffected = ps.executeUpdate();
@@ -160,5 +165,24 @@ public class CabDAOImplementation implements CabDAO{
 	    return false;
 	}
 
+	@Override
+	public boolean hasActiveCabBookings(int cabID) {
+        String sql = "SELECT COUNT(*) FROM booking WHERE cabID = ? AND status NOT IN ('COMPLETED', 'CANCELLED')";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, cabID);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 
 }

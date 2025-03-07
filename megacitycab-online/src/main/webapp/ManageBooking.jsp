@@ -53,7 +53,7 @@ String userRole = LoggedInUser.getRole().toString();
 </head>
 <body onload="initAutocomplete()">
 <h2>Manage Bookings</h2>
-<h3>Book a Cab</h3>
+
 <% if ("ADMIN".equals(userRole)) { %>
  <!-- Add Booking Form -->
     <h3>Add New Booking</h3>
@@ -143,7 +143,7 @@ String userRole = LoggedInUser.getRole().toString();
         <th>Status</th>
         <th>Action</th>
     </tr>
-
+	
     <%
         if (bookings != null) {
         	bookings.sort((b1, b2) -> b2.getBookingDateTime().compareTo(b1.getBookingDateTime()));
@@ -161,10 +161,19 @@ String userRole = LoggedInUser.getRole().toString();
         <td><%= booking.getStatus() %></td>
         <td>
     <% if ("CUSTOMER".equals(userRole)) { %>
-        <a href="CancelBookingServlet?bookingID=<%= booking.getBookingNumber() %>">Cancel</a>
+        <form action="<%= request.getContextPath() %>/CancelBookingServlet"  method="POST" style="display:inline;">
+        <input type="hidden" name="bookingNumber" value="<%= booking.getBookingNumber() %>" >
+        <button type="submit" onclick="return confirm('Are you sure you want to cancel this booking?');">Cancel</button>
+    </form>
     <% } else if ("DRIVER".equals(userRole)) { %>
-        <a href="AcceptBookingServlet?bookingID=<%= booking.getBookingNumber() %>">Accept</a> |
-        <a href="RejectBookingServlet?bookingID=<%= booking.getBookingNumber() %>">Reject</a>
+        <form action="AcceptBookingServlet" method="POST" style="display:inline;">
+        <input type="hidden" name="bookingID" value="<%= booking.getBookingNumber() %>">
+        <button type="submit">Accept</button>
+    </form>
+    <form action="RejectBookingServlet" method="POST" style="display:inline;">
+        <input type="hidden" name="bookingID" value="<%= booking.getBookingNumber() %>">
+        <button type="submit">Reject</button>
+    </form>
     <% } else if ("ADMIN".equals(userRole)) { %>
         <!-- Add a form for updating status -->
         <form action="UpdateBookingStatusServlet" method="POST">
