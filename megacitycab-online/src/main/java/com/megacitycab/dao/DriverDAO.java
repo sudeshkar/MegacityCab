@@ -12,6 +12,8 @@ public interface DriverDAO {
 	List<Driver> getAllDrivers();
 	boolean updateDriver(Driver driver);
 	boolean deleteDriver(int userID);
+	Driver getDriverByUserID(int userid);
+	boolean registerDriver(Driver driver,int userid);
 
 
 

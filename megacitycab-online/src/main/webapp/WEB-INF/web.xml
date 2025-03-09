@@ -60,6 +60,36 @@
   	<description></description>
   	<servlet-class>com.megacitycab.controller.AddCabController</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>UpdateBookingController</servlet-name>
+  	<display-name>UpdateBookingController</display-name>
+  	<description></description>
+  	<servlet-class>com.megacitycab.controller.UpdateBookingController</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>ProcessBillController</servlet-name>
+  	<display-name>ProcessBillController</display-name>
+  	<description></description>
+  	<servlet-class>com.megacitycab.controller.ProcessBillController</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>AcceptBookingController</servlet-name>
+  	<display-name>AcceptBookingController</display-name>
+  	<description></description>
+  	<servlet-class>com.megacitycab.controller.AcceptBookingController</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>RejectBookingController</servlet-name>
+  	<display-name>RejectBookingController</display-name>
+  	<description></description>
+  	<servlet-class>com.megacitycab.controller.RejectBookingController</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>HomeController</servlet-name>
+  	<display-name>HomeController</display-name>
+  	<description></description>
+  	<servlet-class>com.megacitycab.controller.HomeController</servlet-class>
+  </servlet>
    <servlet-mapping>
   	<servlet-name>RegisterController</servlet-name>
   	<url-pattern>/RegisterController</url-pattern>
@@ -97,6 +127,26 @@
   <servlet-mapping>
   	<servlet-name>AddCabController</servlet-name>
   	<url-pattern>/AddCabController</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>UpdateBookingController</servlet-name>
+  	<url-pattern>/UpdateBookingController</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>ProcessBillController</servlet-name>
+  	<url-pattern>/ProcessBillController</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>AcceptBookingController</servlet-name>
+  	<url-pattern>/AcceptBookingController</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>RejectBookingController</servlet-name>
+  	<url-pattern>/RejectBookingController</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>HomeController</servlet-name>
+  	<url-pattern>/HomeController</url-pattern>
   </servlet-mapping>
   
    

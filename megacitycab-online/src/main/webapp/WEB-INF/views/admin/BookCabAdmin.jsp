@@ -1,89 +1,74 @@
 <%@page import="com.megacitycab.model.Customer"%>
-<%@page import="com.megacitycab.model.Cab"%>
 <%@page import="com.megacitycab.model.Driver"%>
+<%@page import="com.megacitycab.model.Cab"%>
 <%@page import="java.util.List"%>
-<%@page import="com.megacitycab.model.User"%>
 <%@page import="com.megacitycab.utils.SessionUtils"%>
+<%@page import="com.megacitycab.model.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
 response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 if (!SessionUtils.isUserLoggedIn(request)) {
-    response.sendRedirect("index.jsp");
+    response.sendRedirect("/index.jsp");
     return;
 }
 
 User LoggedInUser = SessionUtils.getLoggedInUser(request);
 String userRole = LoggedInUser.getRole().toString();
 if(userRole.equals("DRIVER")|| userRole== null){
-	response.sendRedirect("home.jsp");
+	response.sendRedirect("/home.jsp");
     return;
 }
 %>
 <%
     List<Driver> drivers = (List<Driver>) request.getAttribute("drivers");
     List<Cab> cabs = (List<Cab>) request.getAttribute("cabs");
+    List<Customer> customers = (List<Customer>) request.getAttribute("customers");
+    
 %>
-<jsp:include page="header.jsp" />
+<jsp:include page="/header.jsp" />
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Book Cab</title>
 <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/BookCab.css">
-<!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
-    <!-- FontAwesome for Icons -->
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function(){
-            $("#pickup, #destination, #cabType").change(function(){
-                var pickup = $("#pickup").val();
-                var destination = $("#destination").val();
-                var cabType = $("#cabType").val();
+<script src="/js/bookcabjs.js"></script>
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function () {
+    const bookingDate = document.getElementById("date");
+    const bookingTime = document.getElementById("time");
+    const bookingDateTime = document.getElementById("bookingDateTime");
+    const form = document.querySelector("form");
 
-                if (pickup && destination && cabType) {
-                    var baseFare = 1000; 
-                    var distance = Math.floor(Math.random() * (50 - 5) + 5); 
-                    var typeMultiplier = (cabType === "Mini") ? 1 : (cabType === "Sedan") ? 1.5 : 2;
-                    var estimatedFare = baseFare + (distance * 50 * typeMultiplier);
-
-                    $("#fare").text("LKR " + estimatedFare.toFixed(2));
-                    $("#fareBox").fadeIn();
-                }
-            });
-        });
-        
-        document.addEventListener("DOMContentLoaded", function () {
-            const bookingDate = document.getElementById("date");
-            const bookingTime = document.getElementById("time");
-            const bookingDateTime = document.getElementById("bookingDateTime");
-            const form = document.querySelector("form");
-
-            form.addEventListener("submit", function (event) {
-                if (bookingDate.value && bookingTime.value) {
-                    // Combine Date and Time in the format: YYYY-MM-DD HH:mm:ss
-                    const combinedDateTime = `${bookingDate.value} ${bookingTime.value}:00`;
-                    bookingDateTime.value = combinedDateTime; // Set hidden input value
-                    console.log("Final Booking DateTime:", combinedDateTime);
-                }
-            });
-        });
-
-    </script>
+    form.addEventListener("submit", function (event) {
+        if (bookingDate.value && bookingTime.value) {
+            // Combine Date and Time in the format: YYYY-MM-DD HH:mm:ss
+            const combinedDateTime = `${bookingDate.value} ${bookingTime.value}:00`;
+            bookingDateTime.value = combinedDateTime; // Set hidden input value
+            console.log("Final Booking DateTime:", combinedDateTime);
+        }
+    });
+});
+</script>
 </head>
 <body>
-<body>
 
-    <div class="container">
+<div class="container">
         <h2>🚖 Book Your Ride</h2>
 
 			<form action="<%= request.getContextPath() %>/BookCab" method="post">
+			 <!-- Select Customer -->
+			<label for="pickup"><i class="fas fa-map-marker-alt"></i> Select Customer:</label>
+             <select id="customerID" name="customerID" required>
+                        <option value="">Select Customer</option>
+                        <% for (Customer customer : customers) { %>
+                            <option value="<%= customer.getCustomerID() %>"><%= customer.getName() %> - <%= customer.getPhonenumber() %></option>
+                        <% } %> 
+                    </select>
 			 <!-- Pickup Location -->
             <label for="pickup"><i class="fas fa-map-marker-alt"></i> Pickup Location:</label>
             <select id="pickup" name="pickup" required>
@@ -152,9 +137,6 @@ if(userRole.equals("DRIVER")|| userRole== null){
     </div>
 
 
-
- 
-
-<%@ include file="footer.jsp" %>
+<%@ include file="/footer.jsp" %>
 </body>
 </html>

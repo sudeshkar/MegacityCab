@@ -12,6 +12,8 @@ public class Booking {
 	private BookingStatus status;
 	private Cab cab;
 	private Driver driver;
+	
+
 
 	//for new booking
 	public Booking(Customer customer, LocalDateTime bookingDateTime,
@@ -26,6 +28,7 @@ public class Booking {
 		 this.cab = cab;
 		 this.driver = driver;
 		}
+	
 
 	public Booking(int bookingNumber, Customer customer, String pickupLocation,
             String destination, double distance, Cab cab, Driver driver) {

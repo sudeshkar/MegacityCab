@@ -78,8 +78,10 @@
 
             <button type="submit" class="submit-btn">Register</button>
         </form>
+        <form action="<%= request.getContextPath() %>/LoginController" method="get">
         <p>if you have an account?</p>
-        <button type="button" onclick="window.location.href ='LoginRedirect';">Login</button>
+        <button type="submit" action="Clogin" >Login</button>
+        </form>
     </div>
 
     <script>

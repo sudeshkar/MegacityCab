@@ -14,17 +14,17 @@ public class CancelBookingServlet extends HttpServlet {
 
 	private BookingService bookingService;
 
-	@Override
+	 
 	public void init() throws ServletException{
 		bookingService = BookingService.getInstance();
 	}
-	@Override
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
-	@Override
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int bookingNumber =Integer.parseInt(request.getParameter("bookingNumber")) ;
 		 System.out.println(bookingNumber);

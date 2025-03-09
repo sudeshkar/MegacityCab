@@ -44,5 +44,8 @@ public class UserService {
 	public boolean deleteUser(int userid) {
 		return userDAO.deleteUser(userid);
 	}
+	public int createUser(User user) {
+		return userDAO.createUser(user);
+	}
 
 }

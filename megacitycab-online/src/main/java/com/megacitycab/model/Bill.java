@@ -12,26 +12,28 @@ public class Bill {
 	private LocalDateTime billDate;
 	private PaymentStatus paymentStatus;
 
-
-	public Bill(Booking booking,double baseAmount,double discountAmount,double taxAmount,double totalFare) {
-		this.booking=booking;
-		this.baseAmount=baseAmount;
-		this.discountAmount=discountAmount;
-		this.taxAmount=taxAmount;
-		this.totalFare=totalFare;
-		this.billDate=LocalDateTime.now();
-		this.paymentStatus= PaymentStatus.PENDING;
-	}
-	public Bill(Booking booking,double baseAmount,double discountAmount,int billNumber,double taxAmount,double totalFare,LocalDateTime billDate,PaymentStatus paymentStatus) {
-		this.billNumber = billNumber;
-		this.booking=booking;
-		this.baseAmount=baseAmount;
-		this.discountAmount=discountAmount;
-		this.taxAmount=taxAmount;
-		this.totalFare=totalFare;
-		this.billDate= billDate;
-		this.paymentStatus= paymentStatus;
-	}
+	//For new Bill
+	public Bill(Booking booking, double baseAmount, double discountAmount, double taxAmount, double totalFare) {
+        this.booking = booking;
+        this.baseAmount = baseAmount;
+        this.discountAmount = discountAmount;
+        this.taxAmount = taxAmount;
+        this.totalFare = totalFare;
+        this.billDate = LocalDateTime.now();
+        this.paymentStatus = PaymentStatus.PENDING;
+    }
+	//  (for retrieving stored bills)
+    public Bill(int billNumber, Booking booking, double baseAmount, double discountAmount, 
+                double taxAmount, double totalFare, LocalDateTime billDate, PaymentStatus paymentStatus) {
+        this.billNumber = billNumber;
+        this.booking = booking;
+        this.baseAmount = baseAmount;
+        this.discountAmount = discountAmount;
+        this.taxAmount = taxAmount;
+        this.totalFare = totalFare;
+        this.billDate = billDate;
+        this.paymentStatus = paymentStatus;
+    }
 
 
 	public int getBillNumber() {

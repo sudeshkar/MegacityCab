@@ -36,7 +36,7 @@ public class DriverDAOImplementation implements DriverDAO{
 
 	@Override
 	public boolean addDriver(Driver driver) {
-		String sql = "INSERT INTO driver (name, licenseNumber, contactNumber, phoneNumber, address, status) VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO driver (name, licenseNumber, contactNumber, phoneNumber, address, status,userID) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
 	    try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -45,13 +45,47 @@ public class DriverDAOImplementation implements DriverDAO{
 	        ps.setString(3, driver.getContactNumber());
 	        ps.setString(4, driver.getPhoneNumber());
 	        ps.setString(5, driver.getAddress());
-	        ps.setString(6, driver.getDriverStatus().name());
+	        ps.setString(6, driver.getDriverStatus().toString());
 	        ps.setInt(7, driver.getUserID());
 
 
 	        int rowsAffected = ps.executeUpdate();
 	        return rowsAffected > 0;
 	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
+	@Override
+	public boolean registerDriver(Driver driver,int userid) {
+		String checkUserSQL = "SELECT COUNT(*) FROM users WHERE userID = ?";
+		try (PreparedStatement checkUserStmt = conn.prepareStatement(checkUserSQL)) {
+	        checkUserStmt.setInt(1, userid);
+	        System.out.println("user id in Driver Oject : "+userid);
+	        
+	        ResultSet resultSet = checkUserStmt.executeQuery();
+	        if (resultSet.next() && resultSet.getInt(1) > 0) {
+		String sql = "INSERT INTO driver (name, licenseNumber, contactNumber, phoneNumber, address, status,userID) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+	    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+	        ps.setString(1, driver.getName());
+	        ps.setString(2, driver.getLicenseNumber());
+	        ps.setString(3, driver.getContactNumber());
+	        ps.setString(4, driver.getPhoneNumber());
+	        ps.setString(5, driver.getAddress());
+	        ps.setString(6, driver.getDriverStatus().toString());
+	        ps.setInt(7, userid);
+
+
+	        int rowsAffected = ps.executeUpdate();
+	        return rowsAffected > 0;
+	    } 
+	        }else {
+	    	System.out.println("User with userID " + driver.getUserID() + " does not exist.");
+            return false;
+	    }
+		} catch (Exception e) {
 	        e.printStackTrace();
 	        return false;
 	    }
@@ -80,6 +114,42 @@ public class DriverDAOImplementation implements DriverDAO{
 	        }
 	    } catch (Exception e) {
 	        e.printStackTrace();
+	    }
+
+		return driver;
+	}
+	
+	@Override
+	public Driver getDriverByUserID(int userid) {
+		String sql = "SELECT * FROM driver WHERE userID = ?";
+	    Driver driver = null;
+	    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+	        ps.setInt(1, userid);
+	        try (ResultSet rs = ps.executeQuery()) {
+	            if (rs.next()) {
+
+	                driver = new Driver();
+	                driver.setDriverID(rs.getInt("driverID"));
+	                driver.setName(rs.getString("name"));
+	                driver.setLicenseNumber(rs.getString("licenseNumber"));
+	                driver.setContactNumber(rs.getString("contactNumber"));
+	                driver.setPhoneNumber(rs.getString("phoneNumber"));
+	                driver.setAddress(rs.getString("address"));
+	                driver.setDriverStatus(DriverStatus.valueOf(rs.getString("status")));
+	                driver.setUserID(rs.getInt("userId"));
+	                
+	                return driver;
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    if (driver == null) {
+			System.out.println("Driver is Null");
+		}
+	    else {
+	    	System.out.println("Driver OK");
 	    }
 
 		return driver;

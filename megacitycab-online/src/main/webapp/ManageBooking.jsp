@@ -24,9 +24,11 @@ String userRole = LoggedInUser.getRole().toString();
 %>
 <%
     List<Booking> bookings = (List<Booking>) request.getAttribute("bookings");
+    
     List<Customer> customers = (List<Customer>) request.getAttribute("customers");
     List<Driver> drivers = (List<Driver>) request.getAttribute("drivers");
     List<Cab> cabs = (List<Cab>) request.getAttribute("cabs");
+    
 %>
 <!DOCTYPE html>
 <html>
@@ -166,28 +168,70 @@ String userRole = LoggedInUser.getRole().toString();
         <button type="submit" onclick="return confirm('Are you sure you want to cancel this booking?');">Cancel</button>
     </form>
     <% } else if ("DRIVER".equals(userRole)) { %>
-        <form action="AcceptBookingServlet" method="POST" style="display:inline;">
+        <form action="<%= request.getContextPath() %>/AcceptBookingController" method="POST" style="display:inline;">
         <input type="hidden" name="bookingID" value="<%= booking.getBookingNumber() %>">
-        <button type="submit">Accept</button>
+        <button type="submit" onclick="return confirm('Are you sure you want to Accept this booking?');">Accept</button>
     </form>
-    <form action="RejectBookingServlet" method="POST" style="display:inline;">
+    <form action="<%= request.getContextPath() %>/RejectBookingController" method="POST" style="display:inline;">
         <input type="hidden" name="bookingID" value="<%= booking.getBookingNumber() %>">
-        <button type="submit">Reject</button>
+        <button type="submit" onclick="return confirm('Are you sure you want to cancel this booking?');">Reject</button>
     </form>
     <% } else if ("ADMIN".equals(userRole)) { %>
         <!-- Add a form for updating status -->
-        <form action="UpdateBookingStatusServlet" method="POST">
+        <form action="<%= request.getContextPath() %>/UpdateBookingController" method="POST">
             <input type="hidden" name="bookingID" value="<%= booking.getBookingNumber() %>">
             <select name="status" required>
-                <option value="PENDING" <%= "PENDING".equals(booking.getStatus()) ? "selected" : "" %>>⏳ Pending</option>
-                <option value="CONFIRMED" <%= "CONFIRMED".equals(booking.getStatus()) ? "selected" : "" %>>✅ Confirmed</option>
-                <option value="CANCELLED" <%= "CANCELLED".equals(booking.getStatus()) ? "selected" : "" %>>❌ Cancelled</option>
-                <option value="COMPLETED" <%= "COMPLETED".equals(booking.getStatus()) ? "selected" : "" %>>🚗 Completed</option>
+                <option value="PENDING" <%= "PENDING".equals(booking.getStatus().toString()) ? "selected" : "" %>>⏳ Pending</option>
+                <option value="CONFIRMED" <%= "CONFIRMED".equals(booking.getStatus().toString()) ? "selected" : "" %>>✅ Confirmed</option>
+                <option value="CANCELLED" <%= "CANCELLED".equals(booking.getStatus().toString()) ? "selected" : "" %>>❌ Cancelled</option>
+                <option value="COMPLETED" <%= "COMPLETED".equals(booking.getStatus().toString()) ? "selected" : "" %>>🚗 Completed</option>
             </select>
-            <button type="submit">Update Status</button>
+            <button type="submit" name="action" value="update" onclick="return confirm('Are you sure you want to Update this booking?');">Update Status</button>
+            <button type="submit" name="action" value="delete" onclick="return confirm('Are you sure you want to delete this booking?');">Delete Booking</button>
         </form>
     <% } %>
 </td>
+
+    </tr>
+    <%
+            }
+    } else {
+    %>
+    <tr>	
+        <td colspan="6">No bookings found</td>
+    </tr>
+    <%
+        }
+    %>
+</table>
+<% List<Booking> nonPendingBookings = (List<Booking>) request.getAttribute("nonPendingBookings");%>
+<% if("DRIVER".equals(userRole)) { %>
+<h2> Bookings Accepted and Rejected List</h2>
+<table border="1">
+    <tr>
+        <th>Booking ID</th>
+        <th>Pickup Location</th>
+        <th>Drop Location</th>
+        <th>Date</th>
+        <th>Status</th>
+    </tr>
+	
+    <%
+        if (nonPendingBookings != null) {
+        	nonPendingBookings.sort((b1, b2) -> b2.getBookingDateTime().compareTo(b1.getBookingDateTime()));
+        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
+        	
+            for (Booking booking : nonPendingBookings) {
+            	LocalDateTime bookingDateTime = booking.getBookingDateTime();
+                String formattedDate = (bookingDateTime != null) ? bookingDateTime.format(formatter) : "Not Available";
+    %>
+    <tr>
+        <td><%= booking.getBookingNumber() %></td>
+        <td><%= booking.getPickupLocation() %></td>
+        <td><%= booking.getDestination() %></td>
+        <td><%= formattedDate %></td>
+        <td><%= booking.getStatus() %></td>
+        
 
     </tr>
     <%
@@ -201,6 +245,7 @@ String userRole = LoggedInUser.getRole().toString();
         }
     %>
 </table>
+<% } %>
 
 <%@ include file="footer.jsp" %>
 </body>

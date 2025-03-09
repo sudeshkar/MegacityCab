@@ -28,10 +28,13 @@ public class BookingController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private BookingService bookingService;
+	private DriverService driverService;
+	
 
 	@Override
 	public void init() throws ServletException{
 		bookingService = BookingService.getInstance();
+		driverService = DriverService.getInstance();
 	}
 
 
@@ -77,7 +80,7 @@ public class BookingController extends HttpServlet {
 			User LoggedInUser = SessionUtils.getLoggedInUser(request);
 			String userRole = LoggedInUser.getRole().toString();
 			System.out.println("Going to check userRole");
-			if("CUSTOMER".equals(userRole)||"DRIVER".equals(userRole)) {
+			if(LoggedInUser.getRole().toString().equalsIgnoreCase("CUSTOMER")) {
 				int userid =LoggedInUser.getUserID();
 				System.out.println(userid);
 				CustomerService customerService = CustomerService.getInstance();
@@ -91,7 +94,28 @@ public class BookingController extends HttpServlet {
 		        }
 				request.setAttribute("bookings", bookings);
 				request.getRequestDispatcher("/ManageBooking.jsp").forward(request, response);
-			}else {
+			}else if(LoggedInUser.getRole().toString().equalsIgnoreCase("DRIVER")) {
+				int userid =LoggedInUser.getUserID();
+				Driver driver= driverService.getDriverByUserID(userid);
+				List<Booking> bookings =bookingService.getBookingByDriverID(driver.getDriverID());
+				if (bookings == null || bookings.isEmpty()) {
+		            System.out.println("Booking List is Empty or Null");
+		        } else {
+		            System.out.println("Bookings Found: " + bookings.size());
+		        }
+				List<Booking> nonPendingBookings =bookingService.getNonPendingBookings(driver.getDriverID());
+				if (nonPendingBookings == null || nonPendingBookings.isEmpty()) {
+		            System.out.println("nonPendingBookings List is Empty or Null");
+		        } else {
+		            System.out.println("nonPendingBookings Found: " + nonPendingBookings.size());
+		        }
+				request.setAttribute("bookings", bookings);
+				request.setAttribute("nonPendingBookings", nonPendingBookings);
+				request.getRequestDispatcher("/ManageBooking.jsp").forward(request, response);
+				
+			}
+			
+			else {
 			bookingList = bookingService.getAllBookings();
 			request.setAttribute("bookings", bookingList);
 			CustomerService customerService = CustomerService.getInstance();

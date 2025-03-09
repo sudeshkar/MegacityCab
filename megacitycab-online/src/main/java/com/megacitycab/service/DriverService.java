@@ -28,6 +28,9 @@ public class DriverService {
 	public List<Driver> getAllDrivers(){
 		return driverDAO.getAllDrivers();
 	}
+	public Driver getDriverByUserID(int userid){
+		return driverDAO.getDriverByUserID(userid);
+	}
 
 	public Driver getDriverByID(int driverid) {
 		return driverDAO.getDriverById(driverid);
@@ -46,5 +49,8 @@ public class DriverService {
 
 	public boolean deleteDriver(int userid) {
 		return driverDAO.deleteDriver(userid);
+	}
+	public boolean registerDriver(Driver driver,int userid) {
+		return driverDAO.registerDriver(driver,userid);
 	}
 }

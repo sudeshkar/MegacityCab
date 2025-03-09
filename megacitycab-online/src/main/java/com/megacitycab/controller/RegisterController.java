@@ -16,14 +16,15 @@ import com.megacitycab.service.CustomerService;
 import com.megacitycab.service.DriverService;
 import com.megacitycab.service.UserService;
 
-@WebServlet("/Register")
 public class RegisterController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private UserService userService;
+	private DriverService driverService;
 
 	@Override
 	public void init() {
 		userService = UserService.getInstance();
+		driverService = DriverService.getInstance();
 	}
 
 	@Override
@@ -79,16 +80,17 @@ public class RegisterController extends HttpServlet {
 			String licenseNumber =request.getParameter("license");
 			String phone =request.getParameter("phone");
 			String address =request.getParameter("address");
-			userService.addUser(user);
+			int userid= userService.createUser(user);
+			User userr =userService.getUserById(userid);
 			Driver driver = new Driver(
-					user.getUserID(),
-					user.getName(),
-					user.getEmail(),
+					userr.getUserID(),
+					userr.getName(),
+					userr.getEmail(),
 					userRole,
 					licenseNumber,phone,phone,address
 					);
-			DriverService driverService = DriverService.getInstance();
-			boolean addDriver =driverService.addDriver(driver);
+			
+			boolean addDriver = driverService.registerDriver(driver,userid);
 			if (addDriver) {
 				System.out.println("Driver Added Successfully");
 			}
@@ -99,15 +101,6 @@ public class RegisterController extends HttpServlet {
 		response.sendRedirect(request.getContextPath() + "/index.jsp");
 	}
 
-	@WebServlet("/LoginRedirect")
-    public static class LoginRedirectController extends HttpServlet {
-        private static final long serialVersionUID = 1L;
-        @Override
-		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-            response.sendRedirect(request.getContextPath() + "/index.jsp");
-        }
-    }
 
  }
 

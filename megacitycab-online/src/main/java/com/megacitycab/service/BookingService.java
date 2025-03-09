@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.megacitycab.dao.BookingDAO;
 import com.megacitycab.model.Booking;
+import com.megacitycab.model.BookingStatus;
 
 public class BookingService {
 	private static BookingService instance;
@@ -47,7 +48,24 @@ public class BookingService {
 
 		 public boolean deleteBooking(int BookingNumber) {
 			 return bookingDAO.deleteBooking(BookingNumber);
-}
+		 }
+		 
+		 public Booking getBookingById(int bookingid) {
+			 return bookingDAO.getBookingById(bookingid);
+		 }
+		 public boolean updateBooking(Booking booking,String status) {
+			 return bookingDAO.updateBooking(booking,status);
+		 }
+		 public List<Booking> getBookingByDriverID(int driverid) throws Exception{
+
+			 return bookingDAO.getBookingByDriverID(driverid);
+		 }
+		 public List<Booking> getNonPendingBookings(int driverid) {
+
+			 return bookingDAO.getNonPendingBookings(driverid);
+		 }
+
+		 
 
 
 }

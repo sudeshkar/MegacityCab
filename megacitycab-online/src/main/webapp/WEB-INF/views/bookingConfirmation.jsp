@@ -13,6 +13,7 @@ if (!SessionUtils.isUserLoggedIn(request)) {
     return;
 }
 int bookingNumberParam = (int)request.getAttribute("bookingNumber");
+String customerEmailParam = (String)request.getAttribute("customerEmail");
 User user = SessionUtils.getLoggedInUser(request);
 Booking booking = (Booking)request.getSession().getAttribute("booking");
 %>
@@ -44,7 +45,7 @@ Booking booking = (Booking)request.getSession().getAttribute("booking");
                 <p><strong>Driver:</strong> <%= booking.getDriver().getName() %></p>
             </div>
             
-            <p>A confirmation email has been sent to <%= user.getEmail() %>.</p>
+            <p>A confirmation email has been sent to <%= customerEmailParam %>.</p>
             
             <div class="button-group">
                 <a href="<c:url value='/home.jsp'/>" class="btn">Back to Home</a>

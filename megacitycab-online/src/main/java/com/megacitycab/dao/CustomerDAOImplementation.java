@@ -7,36 +7,28 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletException;
+
 import com.megacitycab.model.Customer;
 import com.megacitycab.model.CustomerStatus;
 import com.megacitycab.model.User;
 import com.megacitycab.model.UserRole;
+import com.megacitycab.service.BookingService;
+import com.megacitycab.service.UserService;
 
 public class CustomerDAOImplementation implements CustomerDAO{
 
-	private UserDAO userDAO = new UserDAOImplementation();
-	private Connection connection;
-	public CustomerDAOImplementation(Connection conn) {
-		this.connection =conn;
-
+	private UserService userService;
+	
+	public CustomerDAOImplementation (){
+		userService = UserService.getInstance();
 	}
-
-	public CustomerDAOImplementation() {
-
-	}
-	public CustomerDAOImplementation(Connection conn,UserDAO userDAO) {
-		this.connection =conn;
-		this.userDAO = userDAO;
-
-	}
-	public CustomerDAOImplementation(UserDAO userDAO ) {
-        this.userDAO = new UserDAOImplementation(connection);
-    }
-
+	
+	
 
 	@Override
 	public boolean addCustomer(Customer customer) {
-		User user = userDAO.getUserById(customer.getUserID());
+		User user = userService.getUserById(customer.getUserID());
 	    if (user == null || !user.getRole().toString().equalsIgnoreCase("Customer")) {
 	        return false;
 	    }
@@ -89,8 +81,11 @@ public class CustomerDAOImplementation implements CustomerDAO{
 
 	@Override
 	public Customer getCustomerById(int customerID) {
-	    String sql = "SELECT * FROM customer WHERE customerID = ?";
-	    Customer customer = null;
+		 String sql = "SELECT u.userID, u.userName, u.password, u.email, u.role, " +
+                 "c.customerID, c.address, c.mobileNumber, c.phoneNumber, c.registrationDate, c.status " +
+                 "FROM users u JOIN customer c ON u.userID = c.userID WHERE c.customerID = ?";
+		 
+		 Customer customer = null;
 
 	    try (Connection connection = DBConnectionFactory.getConnection();
 	         PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -98,28 +93,33 @@ public class CustomerDAOImplementation implements CustomerDAO{
 	        ps.setInt(1, customerID);
 	        try (ResultSet rs = ps.executeQuery()) {
 	            if (rs.next()) {
-	                // Fetch associated user
-	                User user = userDAO.getUserById(rs.getInt("userID"));
-	                if (user != null) {
+	               
 
-	                    	customer = new Customer();
-	                        customer.setCustomerID(rs.getInt("customerID"));
-	                        customer.setUserID(rs.getInt("userID"));
-	                        customer.setName(rs.getString("name"));
-	                        customer.setAddress(rs.getString("address"));
-	                        customer.setMobilenumber(rs.getString("mobileNumber"));
-	                        customer.setPhonenumber(rs.getString("phoneNumber"));
-	                        customer.setRegistrationDate(rs.getTimestamp("registrationDate").toLocalDateTime());
-	                        customer.setStatus(CustomerStatus.valueOf(rs.getString("status")));
+	            	customer = new Customer(
+							rs.getInt("customerID"),
+							rs.getInt("userID"),
+							rs.getString("userName"),
+							rs.getString("password"),
+							rs.getString("email"),
+							UserRole.valueOf(rs.getString("role")),
+							rs.getString("address"),
+							rs.getString("mobileNumber"),
+							rs.getString("phoneNumber"),
+							rs.getTimestamp("registrationDate").toLocalDateTime(),
+							CustomerStatus.valueOf(rs.getString("status").toUpperCase())
+							);
 
-	                }
-	                else {
-	                	System.out.println("User not found for userID: ");
-	                }
+	                
 	            }
 	        }
 	    } catch (Exception e) {
 	        e.printStackTrace();
+	    }
+	    if (customer== null) {
+			System.out.println("Customer was Null");
+		}
+	    else {
+	    	System.out.println("Customer fetched");
 	    }
 	    return customer;
 	}
@@ -129,7 +129,7 @@ public class CustomerDAOImplementation implements CustomerDAO{
 	public List<Customer> getAllCustomer() {
 		List<Customer> customers = new ArrayList<>();
 
-		List<User> allUsers = userDAO.getAllUsers();
+		List<User> allUsers = userService.getAllUser();
 		if (allUsers.isEmpty()) {
 	        System.out.println("No users found in userDAOImplementation");
 	    } else {
@@ -248,6 +248,78 @@ public class CustomerDAOImplementation implements CustomerDAO{
 	        throw new NullPointerException("Customer not found for user ID: " + userid);
 	    }
 	    return customer;
+	}
+	
+	@Override
+	public Customer getCustomerByuserID(int userid) {
+		String sql = "SELECT * FROM customer WHERE userID = ?";
+	    Customer customer = null;
+
+	    try (Connection connection = DBConnectionFactory.getConnection();
+	         PreparedStatement ps = connection.prepareStatement(sql)) {
+
+	        ps.setInt(1, userid);
+	        try (ResultSet rs = ps.executeQuery()) {
+	            if (rs.next()) {
+	                // Fetch associated user
+
+	                customer = new Customer();
+					customer.setCustomerID(rs.getInt("customerID"));
+					customer.setUserID(rs.getInt("userID"));
+					customer.setName(rs.getString("name"));
+					customer.setAddress(rs.getString("address"));
+					customer.setMobilenumber(rs.getString("mobileNumber"));
+					customer.setPhonenumber(rs.getString("phoneNumber"));
+					customer.setRegistrationDate(rs.getTimestamp("registrationDate").toLocalDateTime());
+					customer.setStatus(CustomerStatus.valueOf(rs.getString("status")));
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    if (customer == null) {
+	        throw new NullPointerException("Customer not found for user ID: " + userid);
+	    }
+	    return customer;
+	}
+
+	@Override
+	public List<Customer> getAllCustomerAdmin() {
+		List<Customer> customers = new ArrayList<>();
+
+		String sql = "SELECT u.userID, u.userName, u.password, u.email, u.role, c.customerID, c.address, c.mobileNumber, c.phoneNumber, c.registrationDate, c.status " +
+                "FROM users u JOIN customer c ON u.userID = c.userID";
+		try (Connection connection = DBConnectionFactory.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql)){
+			
+				try(ResultSet rs = ps.executeQuery()){
+					while(rs.next()) {
+						Customer customer = new Customer(
+								rs.getInt("customerID"),
+								rs.getInt("userID"),
+								rs.getString("userName"),
+								rs.getString("password"),
+								rs.getString("email"),
+								UserRole.valueOf(rs.getString("role")),
+								rs.getString("address"),
+								rs.getString("mobileNumber"),
+								rs.getString("phoneNumber"),
+								rs.getTimestamp("registrationDate").toLocalDateTime(),
+								CustomerStatus.valueOf(rs.getString("status").toUpperCase())
+								);
+                        	customers.add(customer);
+					}
+				}
+
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		if (customers.isEmpty()) {
+			System.out.println("Customer fetch failed in CustomerDAOImplementation");
+		}
+		return customers;
 	}
 
 

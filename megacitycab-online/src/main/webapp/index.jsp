@@ -1,6 +1,6 @@
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="Login.css">
+    <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/Login.css">
 </head>
 <body>
 <div class="logo">
@@ -37,17 +37,18 @@ if (loginMessage != null) {
 		
 
 			<div class="login">
-				<form class="form" action="Clogin" method="post">
+				<form class="form" action="<%= request.getContextPath() %>/LoginController" method="post">
 					<label for="chk" aria-hidden="true">Megacity Cab Log in</label>
 					<input class="input" type="email" name="email" placeholder="Email" required="">
 					<input class="input" type="password" name="pswd" placeholder="Password" required="">
-					<button>Log in</button>
+					<button type="submit">Log in</button>
 				</form>
 				
 				<div class="register">
+					<form action="<%= request.getContextPath() %>/RegisterController" method="get">
 					<p>if you don't have an account </p>
-					<button type="button" onclick="window.location.href ='Register';">RegisterNow</button>
-
+					<button type="submit" >RegisterNow</button>
+					</form>
 					
 					</div> 
 			</div>
