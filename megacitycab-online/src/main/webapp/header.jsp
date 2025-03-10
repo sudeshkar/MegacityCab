@@ -39,7 +39,7 @@ if (loggedInUser == null) {
            			 <li><a href="<c:url value='/ProcessBillController'/>">Manage Bills</a></li>
         			<% } %>
                 <li><a href="<c:url value='/AboutUs.jsp'/>">About Us</a></li>
-                <li><a href="help.jsp">Help</a></li>
+                <li><a href="<c:url value='/Help.jsp'/>">Help</a></li>
                 <li><a href="<c:url value='/logout'/>" > Logout</a></li>
             </ul>
         </nav>

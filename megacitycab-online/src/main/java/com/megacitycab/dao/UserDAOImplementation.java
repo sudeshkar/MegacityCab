@@ -128,7 +128,7 @@ public class UserDAOImplementation implements UserDAO {
 	                user.setName(rs.getString("userName"));
 	                user.setPassword(rs.getString("password"));
 	                user.setEmail(rs.getString("email"));
-	                user.setRole(UserRole.valueOf("role"));
+	                user.setRole(UserRole.valueOf(rs.getString("role")));
 	                user.setLastLogindate(rs.getTimestamp("lastLoginDate"));
 	            }
 	        }
@@ -172,23 +172,34 @@ public class UserDAOImplementation implements UserDAO {
 
 	@Override
 	public boolean updateUser(User user) {
+	    // Input validation
+	    if (user == null) {
+	        System.err.println("Cannot update user: User object is null");
+	        return false;
+	    }
+	    if (user.getRole() == null) {
+	        System.err.println("Cannot update user: Role is null for user ID " + user.getUserID());
+	        return false;
+	    }
+
 	    String sql = "UPDATE users SET userName = ?, password = ?, email = ?, role = ?, lastLoginDate = ? WHERE userId = ?";
 
-	    try (	Connection conn = DBConnectionFactory.getConnection();
-	    		PreparedStatement ps = conn.prepareStatement(sql)) {
+	    try (Connection conn = DBConnectionFactory.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(sql)) {
 
 	        ps.setString(1, user.getName());
 	        ps.setString(2, user.getPassword());
 	        ps.setString(3, user.getEmail());
-	        ps.setString(4, user.getRole().toString());
+	        ps.setString(4, user.getRole().toString()); // Safe now due to null check
 	        ps.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
 	        ps.setInt(6, user.getUserID());
 
-
 	        int rowsAffected = ps.executeUpdate();
-
+	        System.out.println("Rows affected: " + rowsAffected + " for user ID: " + user.getUserID());
 	        return rowsAffected > 0;
-	    } catch (Exception e) {
+
+	    } catch (SQLException e) {
+	        System.err.println("Failed to update user with ID " + user.getUserID() + ": " + e.getMessage());
 	        e.printStackTrace();
 	        return false;
 	    }

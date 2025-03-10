@@ -9,7 +9,7 @@
 <%
 response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 if (!SessionUtils.isUserLoggedIn(request)) {
-    response.sendRedirect("index.jsp");
+    response.sendRedirect( request.getContextPath() + "/LoginController");
     return;
 }
 
