@@ -52,8 +52,8 @@ public class LoginController extends HttpServlet {
 				HttpSession session = request.getSession();
 				session.setAttribute("loginMessage", "Invalid username or password.");
 			    session.setAttribute("messageType", "error");
-			    response.sendRedirect(request.getContextPath() + "/index.jsp"); 
-			    
+			    response.sendRedirect(request.getContextPath() + "/index.jsp");
+
 			}else
 			{
 				HttpSession session = request.getSession();
@@ -62,14 +62,14 @@ public class LoginController extends HttpServlet {
 				session.setAttribute("loggedInUser", user);
 				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/home.jsp");
 				dispatcher.forward(request, response);
-				 
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 
-		
+
+
 
 	}
 

@@ -55,7 +55,7 @@ public class BookCab extends HttpServlet {
 			ListCabAndDriver(request,response);
 		}
 		else {
-			response.sendRedirect("index.jsp");
+			response.sendRedirect("/index.jsp");
 		}
 
 	}
@@ -63,17 +63,17 @@ public class BookCab extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if (!SessionUtils.isUserLoggedIn(request)) {
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("/index.jsp");
             return;
         }
-		User user= SessionUtils.getLoggedInUser(request);	
+		User user= SessionUtils.getLoggedInUser(request);
 		if (user.getRole().toString().equals("ADMIN")) {
 			addBookingAdmin(request,response);
 		}
 		else {
 			addBooking(request,response);
 		}
-		
+
 	}
 
 	public void ListCabAndDriver(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
@@ -83,7 +83,7 @@ public class BookCab extends HttpServlet {
         request.setAttribute("cabs", cabs);
         request.getRequestDispatcher("/BookCab.jsp").forward(request, response);
 	}
-	
+
 	public void ListCustomerDriverAndCab(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         List<Driver> drivers = driverService.getAllDrivers();
         List<Cab> cabs = cabService.getAllCabs();
@@ -98,7 +98,10 @@ public class BookCab extends HttpServlet {
 		User user = SessionUtils.getLoggedInUser(request);
 		System.out.println(user.getEmail());
 		System.out.println(user.getName());
+		request.setAttribute("customerEmail", user.getEmail());
 		Customer customer =customerService.getCustomerByUserId(user);
+
+
 		String bookingDateTime = request.getParameter("bookingDateTime");
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime parsedDateTime = LocalDateTime.parse(bookingDateTime, formatter);
@@ -109,11 +112,11 @@ public class BookCab extends HttpServlet {
         int driverID = Integer.parseInt(request.getParameter("driverID"));
         System.out.println(customer.getCustomerID());
 
-        
+
         Cab cab = cabService.getCabByCabID(cabID);
         System.out.println(cabID);
 
-        
+
         Driver driver = driverService.getDriverByID(driverID);
         System.out.println(driverID);
 
@@ -129,7 +132,7 @@ public class BookCab extends HttpServlet {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/bookingConfirmation.jsp");
         dispatcher.forward(request, response);
         }
-	
+
 	public void addBookingAdmin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		int customerid =Integer.parseInt(request.getParameter("customerID"));
 		System.out.println("CustomerID :"+ customerid+"In addBookingAdmin");
@@ -159,7 +162,7 @@ public class BookCab extends HttpServlet {
 
 
         int bookingNumber = bookingService.addBooking(booking);
-        
+
         request.setAttribute("bookingNumber", bookingNumber);
         request.getSession().setAttribute("booking", booking);
 

@@ -10,7 +10,7 @@ public class TrafficPlan {
 	public double getBaseRate() {
 		return baseRate;
 	}
-	public TrafficPlan(double baseRate, double perKmRate, CabCategory category, 
+	public TrafficPlan(double baseRate, double perKmRate, CabCategory category,
             double waitingChargePerHour, double peakHourMultiplier) {
 		this.baseRate = baseRate;
 		this.perKmRate = perKmRate;

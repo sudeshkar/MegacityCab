@@ -23,6 +23,10 @@ public class Cab {
 
 	public Cab() {
 	}
+	//for test
+	public Cab(int cabid) {
+		this.cabID = cabid;
+	}
 	public Cab(int cabID, String vehicleNumber, String model, CabCategory category, int capacity,
             String currentLocation, CabStatus cabStatus, LocalDateTime lastUpdated, Driver driver) {
      this.cabID = cabID;

@@ -1,0 +1,46 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+h2 {
+    color: yellow;
+}
+h3 {
+    color: #555;
+    margin-top: 20px;
+}
+.button{
+	margin: 10px auto;
+	display: flex;
+	border-radius: 5%;	
+}
+button:hover{
+	padding: 10px;
+	size: 10px;
+	color: yellow;	
+}
+.booking-details, .billing-details {
+    border: 1px solid #ddd;
+    padding: 15px;
+    max-width: 500px;
+    background-color: #f9f9f9;
+    margin: 20px auto;
+    color: black;
+}
+.booking-details p, .billing-details p {
+    margin: 10px 0;
+}
+.booking-details strong, .billing-details strong {
+    display: inline-block;
+    width: 150px;
+    font-weight: bold;
+}
+a {
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    color: #007BFF;
+}
+a:hover {
+    text-decoration: underline;
+}

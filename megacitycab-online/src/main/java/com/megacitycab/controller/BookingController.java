@@ -29,7 +29,7 @@ public class BookingController extends HttpServlet {
 
 	private BookingService bookingService;
 	private DriverService driverService;
-	
+
 
 	@Override
 	public void init() throws ServletException{
@@ -41,7 +41,7 @@ public class BookingController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		if (!SessionUtils.isUserLoggedIn(request)) {
-            response.sendRedirect("index.jsp");
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
         }
 		String pathInfo = request.getPathInfo();
@@ -61,7 +61,7 @@ public class BookingController extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if (!SessionUtils.isUserLoggedIn(request)) {
-            response.sendRedirect("index.jsp");
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
         }
 		String action = request.getParameter("action");
@@ -112,9 +112,9 @@ public class BookingController extends HttpServlet {
 				request.setAttribute("bookings", bookings);
 				request.setAttribute("nonPendingBookings", nonPendingBookings);
 				request.getRequestDispatcher("/ManageBooking.jsp").forward(request, response);
-				
+
 			}
-			
+
 			else {
 			bookingList = bookingService.getAllBookings();
 			request.setAttribute("bookings", bookingList);

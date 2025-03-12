@@ -10,14 +10,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.megacitycab.model.Bill;
+import com.megacitycab.model.Booking;
 import com.megacitycab.model.PaymentStatus;
+import com.megacitycab.service.BookingService;
 
 public class BillDAOImplementation implements BillDAO {
 
     private Connection connection;
+    private BookingService bookingService;
 
     public BillDAOImplementation(Connection connection) {
-        this.connection = connection;
+        this.bookingService = BookingService.getInstance();
+    	try {
+			this.connection = DBConnectionFactory.getConnection();
+		} catch (SQLException e) {
+			System.out.println("DBConnecting failed in BillDAOImplementation");
+			e.printStackTrace();
+		}
     }
 
     @Override
@@ -43,53 +52,53 @@ public class BillDAOImplementation implements BillDAO {
     @Override
     public Bill getBillByNumber(int billNumber) throws SQLException {
         String query = "SELECT * FROM bill WHERE billNumber = ?";
-//        try (PreparedStatement statement = connection.prepareStatement(query)) {
-//            statement.setInt(1, billNumber);
-//            try (ResultSet rs = statement.executeQuery()) {
-//                if (rs.next()) {
-//                    BookingDAO bookingDAO = new BookingDAO(connection);
-//                    Booking booking = bookingDAO.getBookingById(rs.getInt("bookingNumber"));
-//
-//                    Bill bill = new Bill(
-//                    	booking,
-//                    	rs.getDouble("baseAmount"),
-//                    	rs.getDouble("discountAmount"),
-//                        rs.getInt("billNumber"),
-//                        rs.getDouble("taxAmount"),
-//                        rs.getDouble("totalFare"),
-//                        rs.getTimestamp("billDate").toLocalDateTime(),
-//                        PaymentStatus.valueOf(rs.getString("paymentStatus"))
-//                    );
-//                    return bill;
-//                }
-//            }
-//        }
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, billNumber);
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+
+                    Booking booking = bookingService.getBookingById(rs.getInt("bookingNumber"));
+
+                    Bill bill = new Bill(
+                    	rs.getInt("billNumber"),
+                    	booking,
+                    	rs.getDouble("baseAmount"),
+                    	rs.getDouble("discountAmount"),
+                    	rs.getDouble("taxAmount"),
+                    	rs.getDouble("totalFare"),
+                        rs.getTimestamp("billDate").toLocalDateTime(),
+                        PaymentStatus.valueOf(rs.getString("paymentStatus"))
+                    );
+                    return bill;
+                }
+            }
+        }
         return null;
     }
 
     @Override
     public List<Bill> getAllBills() throws SQLException {
         List<Bill> bills = new ArrayList<>();
-//        String query = "SELECT * FROM bill";
-//        try (PreparedStatement statement = connection.prepareStatement(query);
-//             ResultSet rs = statement.executeQuery();) {
-//            BookingDAO bookingDAO = new BookingDAO(connection);
-//            while (rs.next()) {
-//                Booking booking = bookingDAO.getBookingById(rs.getInt("bookingNumber"));
-//
-//                Bill bill = new Bill(
-//                		booking,
-//                    	rs.getDouble("baseAmount"),
-//                    	rs.getDouble("discountAmount"),
-//                        rs.getInt("billNumber"),
-//                        rs.getDouble("taxAmount"),
-//                        rs.getDouble("totalFare"),
-//                        rs.getTimestamp("billDate").toLocalDateTime(),
-//                        PaymentStatus.valueOf(rs.getString("paymentStatus"))
-//                );
-//                bills.add(bill);
-//            }
-//        }
+        String query = "SELECT * FROM bill";
+        try (PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet rs = statement.executeQuery();) {
+
+            while (rs.next()) {
+                Booking booking = bookingService.getBookingById(rs.getInt("bookingNumber"));
+
+                Bill bill = new Bill(
+                		rs.getInt("billNumber"),
+                    	booking,
+                    	rs.getDouble("baseAmount"),
+                    	rs.getDouble("discountAmount"),
+                    	rs.getDouble("taxAmount"),
+                    	rs.getDouble("totalFare"),
+                        rs.getTimestamp("billDate").toLocalDateTime(),
+                        PaymentStatus.valueOf(rs.getString("paymentStatus"))
+                );
+                bills.add(bill);
+            }
+        }
         return bills;
     }
 
@@ -133,29 +142,29 @@ public class BillDAOImplementation implements BillDAO {
     @Override
 	public List<Bill> getBillsByDateRange(LocalDateTime startDate, LocalDateTime endDate) throws SQLException {
         List<Bill> bills = new ArrayList<>();
-//        String query = "SELECT * FROM bill WHERE billDate BETWEEN ? AND ?";
-//        try (PreparedStatement statement = connection.prepareStatement(query)) {
-//            statement.setTimestamp(1, Timestamp.valueOf(startDate));
-//            statement.setTimestamp(2, Timestamp.valueOf(endDate));
-//            try (ResultSet rs = statement.executeQuery()) {
-//                BookingDAO bookingDAO = new BookingDAO(connection);
-//                while (rs.next()) {
-//                    Booking booking = bookingDAO.getBookingById(rs.getInt("bookingNumber"));
-//
-//                    Bill bill = new Bill(
-//                    		booking,
-//                        	rs.getDouble("baseAmount"),
-//                        	rs.getDouble("discountAmount"),
-//                            rs.getInt("billNumber"),
-//                            rs.getDouble("taxAmount"),
-//                            rs.getDouble("totalFare"),
-//                            rs.getTimestamp("billDate").toLocalDateTime(),
-//                            PaymentStatus.valueOf(rs.getString("paymentStatus"))
-//                    );
-//                    bills.add(bill);
-//                }
-//            }
-//        }
+        String query = "SELECT * FROM bill WHERE billDate BETWEEN ? AND ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setTimestamp(1, Timestamp.valueOf(startDate));
+            statement.setTimestamp(2, Timestamp.valueOf(endDate));
+            try (ResultSet rs = statement.executeQuery()) {
+
+                while (rs.next()) {
+                    Booking booking = bookingService.getBookingById(rs.getInt("bookingNumber"));
+
+                    Bill bill = new Bill(
+                    		rs.getInt("billNumber"),
+                        	booking,
+                        	rs.getDouble("baseAmount"),
+                        	rs.getDouble("discountAmount"),
+                        	rs.getDouble("taxAmount"),
+                        	rs.getDouble("totalFare"),
+                            rs.getTimestamp("billDate").toLocalDateTime(),
+                            PaymentStatus.valueOf(rs.getString("paymentStatus"))
+                    );
+                    bills.add(bill);
+                }
+            }
+        }
         return bills;
     }
 
@@ -174,54 +183,54 @@ public class BillDAOImplementation implements BillDAO {
     @Override
     public Bill getBillByBookingNumber(int bookingNumber) throws SQLException {
         String query = "SELECT * FROM bill WHERE bookingNumber = ?";
-//        try (PreparedStatement statement = connection.prepareStatement(query)) {
-//            statement.setInt(1, bookingNumber);
-//            try (ResultSet rs = statement.executeQuery()) {
-//                if (rs.next()) {
-//                    BookingDAO bookingDAO = new BookingDAO(connection);
-//                    Booking booking = bookingDAO.getBookingById(bookingNumber);
-//
-//                    return new Bill(
-//                    		booking,
-//                        	rs.getDouble("baseAmount"),
-//                        	rs.getDouble("discountAmount"),
-//                            rs.getInt("billNumber"),
-//                            rs.getDouble("taxAmount"),
-//                            rs.getDouble("totalFare"),
-//                            rs.getTimestamp("billDate").toLocalDateTime(),
-//                            PaymentStatus.valueOf(rs.getString("paymentStatus"))
-//                    );
-//                }
-//            }
-//        }
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, bookingNumber);
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+
+                    Booking booking = bookingService.getBookingById(bookingNumber);
+
+                    return new Bill(
+                    		rs.getInt("billNumber"),
+                        	booking,
+                        	rs.getDouble("baseAmount"),
+                        	rs.getDouble("discountAmount"),
+                        	rs.getDouble("taxAmount"),
+                        	rs.getDouble("totalFare"),
+                            rs.getTimestamp("billDate").toLocalDateTime(),
+                            PaymentStatus.valueOf(rs.getString("paymentStatus"))
+                    );
+                }
+            }
+        }
         return null;
     }
 
     @Override
     public List<Bill> getBillsByPaymentStatus(PaymentStatus status) throws SQLException {
         List<Bill> bills = new ArrayList<>();
-//        String query = "SELECT * FROM bill WHERE paymentStatus = ?";
-//        try (PreparedStatement statement = connection.prepareStatement(query)) {
-//            statement.setString(1, status.toString());
-//            try (ResultSet rs = statement.executeQuery()) {
-//                BookingDAO bookingDAO = new BookingDAO(connection);
-//                while (rs.next()) {
-//                    Booking booking = bookingDAO.getBookingById(rs.getInt("bookingNumber"));
-//
-//                    Bill bill = new Bill(
-//                    		booking,
-//                        	rs.getDouble("baseAmount"),
-//                        	rs.getDouble("discountAmount"),
-//                            rs.getInt("billNumber"),
-//                            rs.getDouble("taxAmount"),
-//                            rs.getDouble("totalFare"),
-//                            rs.getTimestamp("billDate").toLocalDateTime(),
-//                            PaymentStatus.valueOf(rs.getString("paymentStatus"))
-//                    );
-//                    bills.add(bill);
-//                }
-//            }
-//        }
+        String query = "SELECT * FROM bill WHERE paymentStatus = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, status.toString());
+            try (ResultSet rs = statement.executeQuery()) {
+
+                while (rs.next()) {
+                    Booking booking = bookingService.getBookingById(rs.getInt("bookingNumber"));
+
+                    Bill bill = new Bill(
+                    		rs.getInt("billNumber"),
+                        	booking,
+                        	rs.getDouble("baseAmount"),
+                        	rs.getDouble("discountAmount"),
+                        	rs.getDouble("taxAmount"),
+                        	rs.getDouble("totalFare"),
+                            rs.getTimestamp("billDate").toLocalDateTime(),
+                            PaymentStatus.valueOf(rs.getString("paymentStatus"))
+                    );
+                    bills.add(bill);
+                }
+            }
+        }
         return bills;
     }
 

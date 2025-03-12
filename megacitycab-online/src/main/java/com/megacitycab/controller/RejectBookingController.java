@@ -1,6 +1,7 @@
 package com.megacitycab.controller;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,29 +14,32 @@ import com.megacitycab.service.BookingService;
 public class RejectBookingController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private BookingService bookingService;
-	
+
+	@Override
 	public void init() throws ServletException{
 		bookingService = BookingService.getInstance();
 	}
-   
+
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 
-		 
+
+
 	}
 
-	 
+
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String bookingID = request.getParameter("bookingID");
 	    System.out.println("Received bookingID: " + bookingID);
 	    if (bookingID == null || bookingID.isEmpty()) {
 	        System.out.println("Error: bookingID is null or empty.");
-	        response.sendRedirect("/home.jsp");  
+	        response.sendRedirect("/home.jsp");
 	        return;
 	    }
 			 rejectBooking(request,response);
-			 
-			 response.sendRedirect(request.getContextPath() + "/BookingController/list"); 
-		 
+
+			 response.sendRedirect(request.getContextPath() + "/BookingController/list");
+
 	}
 
 
@@ -44,7 +48,7 @@ public class RejectBookingController extends HttpServlet {
 		 Booking booking= bookingService.getBookingById(bookingNumber);
 		 String status = BookingStatus.CANCELLED.toString();
 		 bookingService.updateBooking(booking,status);
-		
+
 	}
 
 }

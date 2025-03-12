@@ -28,6 +28,7 @@ public class Customer extends User{
 				this.registrationDate = LocalDateTime.now();
 				this.status =CustomerStatus.ACTIVE ;
 				}
+
 	public Customer(int customerID, int userID, String name,String password, String email, UserRole role,
             String address, String mobilenumber, String phonenumber, LocalDateTime registrationDate,CustomerStatus Status) {
 				super(userID, name, email, role);

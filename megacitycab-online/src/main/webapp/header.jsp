@@ -38,9 +38,13 @@ if (loggedInUser == null) {
         		<% if (loggedInUser.getRole().toString().equals("ADMIN")) { %>
            			 <li><a href="<c:url value='/ProcessBillController'/>">Manage Bills</a></li>
         			<% } %>
+        		<% if (loggedInUser.getRole().toString().equals("DRIVER") || loggedInUser.getRole().toString().equals("CUSTOMER")) { %>
+           			 <li><a href="<c:url value='/TrackBooking'/>">Ongoing Booking</a></li>
+        			<% } %>
                 <li><a href="<c:url value='/AboutUs.jsp'/>">About Us</a></li>
                 <li><a href="<c:url value='/Help.jsp'/>">Help</a></li>
-                <li><a href="<c:url value='/logout'/>" > Logout</a></li>
+				 <li><a href="<c:url value='/logout'/>">Logout</a></li>
+				 
             </ul>
         </nav>
     </header>

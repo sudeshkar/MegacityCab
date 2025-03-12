@@ -54,7 +54,7 @@ public class CustomerService {
 	public boolean createCustomer(Customer customer) {
 		return customerDAO.createCustomer(customer);
 	}
-	
+
 	public List<Customer> getAllCustomerAdmin(){
 
 		return customerDAO.getAllCustomerAdmin();

@@ -7,24 +7,21 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.ServletException;
-
 import com.megacitycab.model.Customer;
 import com.megacitycab.model.CustomerStatus;
 import com.megacitycab.model.User;
 import com.megacitycab.model.UserRole;
-import com.megacitycab.service.BookingService;
 import com.megacitycab.service.UserService;
 
 public class CustomerDAOImplementation implements CustomerDAO{
 
 	private UserService userService;
-	
+
 	public CustomerDAOImplementation (){
 		userService = UserService.getInstance();
 	}
-	
-	
+
+
 
 	@Override
 	public boolean addCustomer(Customer customer) {
@@ -84,7 +81,7 @@ public class CustomerDAOImplementation implements CustomerDAO{
 		 String sql = "SELECT u.userID, u.userName, u.password, u.email, u.role, " +
                  "c.customerID, c.address, c.mobileNumber, c.phoneNumber, c.registrationDate, c.status " +
                  "FROM users u JOIN customer c ON u.userID = c.userID WHERE c.customerID = ?";
-		 
+
 		 Customer customer = null;
 
 	    try (Connection connection = DBConnectionFactory.getConnection();
@@ -93,7 +90,7 @@ public class CustomerDAOImplementation implements CustomerDAO{
 	        ps.setInt(1, customerID);
 	        try (ResultSet rs = ps.executeQuery()) {
 	            if (rs.next()) {
-	               
+
 
 	            	customer = new Customer(
 							rs.getInt("customerID"),
@@ -109,7 +106,7 @@ public class CustomerDAOImplementation implements CustomerDAO{
 							CustomerStatus.valueOf(rs.getString("status").toUpperCase())
 							);
 
-	                
+
 	            }
 	        }
 	    } catch (Exception e) {
@@ -249,7 +246,7 @@ public class CustomerDAOImplementation implements CustomerDAO{
 	    }
 	    return customer;
 	}
-	
+
 	@Override
 	public Customer getCustomerByuserID(int userid) {
 		String sql = "SELECT * FROM customer WHERE userID = ?";
@@ -291,7 +288,7 @@ public class CustomerDAOImplementation implements CustomerDAO{
                 "FROM users u JOIN customer c ON u.userID = c.userID";
 		try (Connection connection = DBConnectionFactory.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql)){
-			
+
 				try(ResultSet rs = ps.executeQuery()){
 					while(rs.next()) {
 						Customer customer = new Customer(
@@ -311,7 +308,7 @@ public class CustomerDAOImplementation implements CustomerDAO{
 					}
 				}
 
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

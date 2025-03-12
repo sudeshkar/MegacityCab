@@ -100,6 +100,18 @@
   	<description></description>
   	<servlet-class>com.megacitycab.controller.HomeController</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>TrackBooking</servlet-name>
+  	<display-name>TrackBooking</display-name>
+  	<description></description>
+  	<servlet-class>com.megacitycab.controller.TrackBooking</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>ViewBookingDetailController</servlet-name>
+  	<display-name>ViewBookingDetailController</display-name>
+  	<description></description>
+  	<servlet-class>com.megacitycab.controller.ViewBookingDetailController</servlet-class>
+  </servlet>
    <servlet-mapping>
   	<servlet-name>RegisterController</servlet-name>
   	<url-pattern>/RegisterController</url-pattern>
@@ -157,6 +169,14 @@
   <servlet-mapping>
   	<servlet-name>HomeController</servlet-name>
   	<url-pattern>/HomeController</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>TrackBooking</servlet-name>
+  	<url-pattern>/TrackBooking</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>ViewBookingDetailController</servlet-name>
+  	<url-pattern>/ViewBookingDetailController</url-pattern>
   </servlet-mapping>
   
    

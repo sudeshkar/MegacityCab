@@ -3,7 +3,6 @@ package com.megacitycab.controller;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -89,7 +88,7 @@ public class RegisterController extends HttpServlet {
 					userRole,
 					licenseNumber,phone,phone,address
 					);
-			
+
 			boolean addDriver = driverService.registerDriver(driver,userid);
 			if (addDriver) {
 				System.out.println("Driver Added Successfully");

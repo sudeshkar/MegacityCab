@@ -18,7 +18,11 @@ public class Driver extends User{
 				  this.address = address;
 				  this.driverStatus = driverStatus;
 				}
-	
+
+	//for test
+	public Driver(int driverID) {
+				  this.driverID =driverID;
+				}
 	public Driver(int userID, String name, String email, UserRole role, String licenseNumber,
             String contactNumber, String phoneNumber, String address) {
 				  super(userID, name, email, role);

@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.megacitycab.dao.BookingDAO;
 import com.megacitycab.model.Booking;
-import com.megacitycab.model.BookingStatus;
 
 public class BookingService {
 	private static BookingService instance;
@@ -49,7 +48,7 @@ public class BookingService {
 		 public boolean deleteBooking(int BookingNumber) {
 			 return bookingDAO.deleteBooking(BookingNumber);
 		 }
-		 
+
 		 public Booking getBookingById(int bookingid) {
 			 return bookingDAO.getBookingById(bookingid);
 		 }
@@ -65,7 +64,16 @@ public class BookingService {
 			 return bookingDAO.getNonPendingBookings(driverid);
 		 }
 
-		 
+		 public List<Booking> getConfirmedBookingsByDriverID(int driverid) {
+
+			 return bookingDAO.getConfirmedBooking(driverid);
+		 }
+		 public List<Booking> getConfirmedBookingsByCustomerID(int customerid) {
+
+			 return bookingDAO.getConfirmedBookingByCustomerID(customerid);
+		 }
+
+
 
 
 }

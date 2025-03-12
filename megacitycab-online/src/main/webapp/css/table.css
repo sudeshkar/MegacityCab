@@ -1,0 +1,76 @@
+@charset "UTF-8";
+ 
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    color: black;
+}
+
+/* Table header styling */
+th {
+    background-color: #4CAF50; /* Green background for header */
+    color: white;
+    text-align: left;
+    padding: 12px 15px;
+    font-weight: bold;
+}
+
+/* Table rows and cells */
+td, th {
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+}
+
+/* Alternating row colors for readability */
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+/* Hover effect for rows */
+tr:hover {
+    background-color: #f1f1f1;
+    transition: background-color 0.3s ease;
+}
+
+/* Styling for the "No bookings found" message */
+td[colspan="6"] {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    padding: 20px;
+}
+
+/* Button styling */
+button {
+    background-color: #ff4444; /* Red button for "End Booking" */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #cc0000; /* Darker red on hover */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    table {
+        display: block;
+        overflow-x: auto; /* Horizontal scroll for small screens */
+    }
+    
+    th, td {
+        min-width: 120px; /* Ensure columns don't collapse too much */
+    }
+}

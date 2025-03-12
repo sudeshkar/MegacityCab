@@ -15,15 +15,14 @@ private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.sendRedirect(request.getContextPath() + "/index.jsp");
 
-		SessionUtils.logoutUser(request);
-        response.sendRedirect("index.jsp");
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		doGet(request, response);
+		SessionUtils.logoutUser(request);
+		response.sendRedirect(request.getContextPath() + "/index.jsp");
 	}
 
 }

@@ -185,4 +185,40 @@ public class CabDAOImplementation implements CabDAO{
         return false;
     }
 
+	@Override
+	public Cab getCabByDriverID(int driverid) {
+	    String query = "SELECT * FROM cab WHERE driverID = ?";
+
+	    try (Connection connection = DBConnectionFactory.getConnection();
+	         PreparedStatement statement = connection.prepareStatement(query)) {
+
+	        statement.setInt(1, driverid);
+	        ResultSet rs = statement.executeQuery();
+
+	        if (rs.next()) {
+	        	Driver driver = driverDAO.getDriverById(driverid);
+	        	Cab cab = new Cab(
+	            		rs.getInt("cabID"),
+	                    rs.getString("vehicleNumber"),
+	                    rs.getString("model"),
+	                    CabCategory.valueOf(rs.getString("category").toString()),
+	                    rs.getInt("capacity"),
+	                    rs.getString("currentLocation"),
+	                    CabStatus.valueOf(rs.getString("status").toString()),
+	                    rs.getTimestamp("lastUpdated").toLocalDateTime(),
+	                    driver
+
+	            );
+
+
+
+
+	            return cab;
+	        }
+	    } catch (SQLException e) {
+	        System.err.println("Error fetching cab: " + e.getMessage());
+	    }
+	    return null;
+	}
+
 }

@@ -7,13 +7,13 @@ public class Bill {
 	private Booking booking;
 	private double baseAmount;
 	private double discountAmount;
-	private double taxAmount;
+	private	 double taxAmount;
 	private double totalFare;
 	private LocalDateTime billDate;
 	private PaymentStatus paymentStatus;
 
 	//For new Bill
-	public Bill(Booking booking, double baseAmount, double discountAmount, double taxAmount, double totalFare) {
+	public Bill(Booking booking,double baseAmount, double discountAmount, double taxAmount, double totalFare) {
         this.booking = booking;
         this.baseAmount = baseAmount;
         this.discountAmount = discountAmount;
@@ -23,7 +23,7 @@ public class Bill {
         this.paymentStatus = PaymentStatus.PENDING;
     }
 	//  (for retrieving stored bills)
-    public Bill(int billNumber, Booking booking, double baseAmount, double discountAmount, 
+    public Bill(int billNumber, Booking booking, double baseAmount, double discountAmount,
                 double taxAmount, double totalFare, LocalDateTime billDate, PaymentStatus paymentStatus) {
         this.billNumber = billNumber;
         this.booking = booking;

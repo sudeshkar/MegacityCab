@@ -1,19 +1,25 @@
 package com.megacitycab.dao;
 
-import com.megacitycab.model.Driver;
-import com.megacitycab.model.DriverStatus;
-import com.megacitycab.model.User;
-import com.megacitycab.model.UserRole;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.megacitycab.model.Driver;
+import com.megacitycab.model.DriverStatus;
+import com.megacitycab.model.User;
+import com.megacitycab.model.UserRole;
 
 class DriverDAOImplementationTest {
 
@@ -134,18 +140,18 @@ class DriverDAOImplementationTest {
 
     @Test
     void testGetDriverByEmail() {
-         
+
         int userId = userDAO.createUser(testUser);
         driverDAO.registerDriver(testDriver, userId);
 
-         
+
         System.out.println("DEBUG TEST: Created user with email: " + testUser.getEmail());
         System.out.println("DEBUG TEST: User ID: " + userId);
 
         // Test
         Driver retrieved = driverDAO.getDriverByEmail(testUser.getEmail());
-        
-         
+
+
         if (retrieved != null) {
             System.out.println("DEBUG TEST: Retrieved driver");
             System.out.println("DEBUG TEST: Driver email: " + retrieved.getEmail());
@@ -154,14 +160,14 @@ class DriverDAOImplementationTest {
         } else {
             System.out.println("DEBUG TEST: Retrieved driver is null!");
         }
-        
+
         assertNotNull(retrieved, "Driver should be found by email");
-        
-         
+
+
         System.out.println("DEBUG TEST: Comparing emails:");
         System.out.println("DEBUG TEST: Expected: " + testUser.getEmail());
         System.out.println("DEBUG TEST: Actual: " + retrieved.getEmail());
-        
+
         assertEquals(testUser.getEmail(), retrieved.getEmail(), "Email should match");
     }
 
@@ -183,23 +189,23 @@ class DriverDAOImplementationTest {
     void testUpdateDriver() {
         // Setup
         int userId = userDAO.createUser(testUser);
-        
+
         driverDAO.registerDriver(testDriver,userId);
-        
+
         	// Modify driver
             testDriver.setLicenseNumber("NEW" + UUID.randomUUID().toString().substring(0, 8));
-            testDriver.setName("updatedDriver"); 
+            testDriver.setName("updatedDriver");
             boolean result = driverDAO.updateDriver(testDriver);
             assertTrue(result, "Update should succeed");
-            
+
          // Verify
             Driver updated = driverDAO.getDriverByUserID(userId);
             assertEquals(testDriver.getLicenseNumber(), updated.getLicenseNumber());
             assertEquals("updatedDriver", updated.getName());
 		}
-         
-        
-   	
+
+
+
 
     @Test
     void testDeleteDriver() {

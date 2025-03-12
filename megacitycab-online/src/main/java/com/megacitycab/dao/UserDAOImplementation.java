@@ -12,7 +12,6 @@ import java.util.List;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-
 import com.megacitycab.model.User;
 import com.megacitycab.model.UserRole;
 
@@ -35,7 +34,7 @@ public class UserDAOImplementation implements UserDAO {
 
 
 
-	
+
 	@Override
 	public boolean addUser(User user) {
 	// Hashing the password before storing For Security
@@ -68,8 +67,8 @@ public class UserDAOImplementation implements UserDAO {
 	return false;
 	}
 	}
-	
-	
+
+
 
 	@Override
 	public User getUserById(int userId) {
@@ -242,68 +241,68 @@ public class UserDAOImplementation implements UserDAO {
 	        if (rs.next()) {
 	            String storedPassword = rs.getString("password");
 	            boolean authenticated = false;
-	            
-	            
+
+
 	            if (storedPassword.startsWith("$2")) {
-	                
+
 	                try {
 	                    authenticated = BCrypt.checkpw(password, storedPassword);
 	                } catch (IllegalArgumentException e) {
-	                    
+
 	                    authenticated = password.equals(storedPassword);
 	                }
 	            } else {
-	                
+
 	                authenticated = password.equals(storedPassword);
-	                
-	                 
+
+
 	                if (authenticated) {
 	                    upgradePassword(rs.getInt("userID"), password, connection);
 	                }
 	            }
-	            
+
 	            if (authenticated) {
-	                 
+
 	                user = new User();
 	                user.setUserID(rs.getInt("userID"));
 	                user.setName(rs.getString("userName"));
 	                user.setEmail(rs.getString("email"));
-	                
+
 	                String roleString = rs.getString("role");
 	                if (roleString != null && !roleString.isEmpty()) {
 	                    try {
-	                         
+
 	                        UserRole role = UserRole.valueOf(roleString.toUpperCase());
 	                        user.setRole(role);
 	                    } catch (IllegalArgumentException e) {
 	                        System.err.println("Invalid role found in database: " + roleString);
-	                         
+
 	                        user.setRole(UserRole.CUSTOMER);
 	                    }
 	                } else {
-	                     
+
 	                    user.setRole(UserRole.CUSTOMER);
 	                }
-	                
+
 	                user.setLastLogindate(rs.getTimestamp("lastLoginDate"));
-	                
+
 	                return user;
 	            }
 	        }
-	        
+
 	        return null;
-	        
+
 	    } catch (SQLException e) {
 	        System.err.println("Database error during login: " + e.getMessage());
 	        return null;
 	    }
 	}
 
-	 
+
 	private void upgradePassword(int userId, String plainPassword, Connection connection) {
 	    String hashedPassword = BCrypt.hashpw(plainPassword, BCrypt.gensalt());
 	    String updateQuery = "UPDATE users SET password = ? WHERE userID = ?";
-	    
+
 	    try (PreparedStatement stmt = connection.prepareStatement(updateQuery)) {
 	        stmt.setString(1, hashedPassword);
 	        stmt.setInt(2, userId);
@@ -354,7 +353,7 @@ public class UserDAOImplementation implements UserDAO {
 	    }
 	}
 
-	 
+
 
 
 }

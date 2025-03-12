@@ -1,33 +1,155 @@
-@charset "UTF-8";
 body {
-    font-family: Arial, sans-serif;
-    padding: 0;
-    background-color: #f4f4f4;
-}
-.container {
-	margin:15px auto;
-    width: 50%;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    color: black;
-    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-}
-input, select {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-.btn {
-    background-color: #28a745;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-.btn:hover {
-    background-color: #218838;
-}
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: auto;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 10px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+           
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        input[readonly] {
+            background-color: #f0f0f0;
+            color: #777;
+        }
+
+        input[type="checkbox"] {
+            width: auto;
+            margin-top: 5px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Error or disabled state */
+        select:invalid,
+        input:invalid {
+            border-color: #ff4444;
+        }
+
+        /* Layout for form and table */
+        .page-layout {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+        
+        .form-container {
+            flex: 1;
+            min-width: 350px;
+        }
+        
+        .table-container {
+            flex: 1;
+            min-width: 350px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-height: 600px;
+            overflow-y: auto;
+            color: black;
+        }
+        
+        .bookings-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .bookings-table th, .bookings-table td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        .bookings-table th {
+            background-color: #f2f2f2;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        
+        .bookings-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .bookings-table tr:hover {
+            background-color: #f5f5f5;
+            cursor: pointer;
+        }
+        
+        .selected-row {
+            background-color: #e6f7ff !important;
+            border-left: 3px solid #4CAF50;
+        }
+
+        /* Responsive design */
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            .btn {
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .page-layout {
+                flex-direction: column;
+            }
+            
+            .form-container, .table-container {
+                width: 100%;
+            }
+        }

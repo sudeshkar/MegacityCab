@@ -59,6 +59,9 @@ public class CabService {
 	public boolean deleteCab(int cabid) {
 		return cabDAO.deleteCab(cabid);
 	}
+	public Cab getCabByDriverID(int driverid) {
+		return cabDAO.getCabByDriverID(driverid);
+	}
 
 
 }

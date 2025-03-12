@@ -16,22 +16,25 @@ public class NoCacheFilter extends HttpFilter implements Filter {
 	private static final long serialVersionUID = 1L;
 
 
+	@Override
 	public void destroy() {
-	 
+
 	}
- 
+
+	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
-        
+
         httpResponse.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-        httpResponse.setHeader("Pragma", "no-cache");  
-        httpResponse.setDateHeader("Expires", 0);  
+        httpResponse.setHeader("Pragma", "no-cache");
+        httpResponse.setDateHeader("Expires", 0);
         chain.doFilter(request, response);
 	}
 
-	 
+
+	@Override
 	public void init(FilterConfig fConfig) throws ServletException {
-		 
+
 	}
 
 }

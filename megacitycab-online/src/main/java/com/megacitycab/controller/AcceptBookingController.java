@@ -14,16 +14,19 @@ import com.megacitycab.service.BookingService;
 public class AcceptBookingController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private BookingService bookingService;
-	
+
+	@Override
 	public void init() throws ServletException{
 		bookingService = BookingService.getInstance();
 	}
-   
+
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 
-		
+
+
 	}
- 
+
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String bookingID = request.getParameter("bookingID");
 	    System.out.println("Received bookingID: " + bookingID);
@@ -33,13 +36,13 @@ public class AcceptBookingController extends HttpServlet {
 	        return;
 	    }
 			 acceptBooking(request,response);
-			 
-			 response.sendRedirect(request.getContextPath() + "/BookingController/list"); 
-		
-	
-		
+
+			 response.sendRedirect(request.getContextPath() + "/BookingController/list");
+
+
+
 	}
-	
+
 	private void acceptBooking(HttpServletRequest request, HttpServletResponse response) {
 		int bookingNumber =Integer.parseInt(request.getParameter("bookingID"));
 		 Booking booking= bookingService.getBookingById(bookingNumber);
