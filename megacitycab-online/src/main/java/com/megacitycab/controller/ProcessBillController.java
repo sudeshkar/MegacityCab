@@ -67,22 +67,22 @@ public class ProcessBillController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		Booking booking=bookingService.getBookingById(Integer.parseInt(request.getParameter("bookingId")));
-		 
+
 		double baseRate = Double.parseDouble(request.getParameter("baseRate"));
 		double discountAmount = Double.parseDouble(request.getParameter("discountAmount"));
 		double totalFare = Double.parseDouble(request.getParameter("totalFare"));
 		double taxAmount =0.10;
-		
+
 		Bill bill = new Bill(booking,baseRate, discountAmount, taxAmount, totalFare);
 		try {
 			billService.addBill(bill);
 			generateReceipt(response,booking,totalFare,request);
 		} catch (SQLException e) {
-			 
+
 			e.printStackTrace();
 		}
-		
-		
+
+
     }
 
 	public static String formatDateTime(LocalDateTime dateTime) {

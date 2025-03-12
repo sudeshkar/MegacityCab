@@ -1,12 +1,12 @@
 @charset "UTF-8";
 body {
-          font-family: 'Poppins', sans-serif;
-          background: #f4f6f9;
-          justify-content: center;
-          align-items: center;
-          height: 100vh;
-          margin: 0;
-      }
+    font-family: 'Poppins', sans-serif;
+    background: #f4f6f9;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
 
       .container {
           background: white;

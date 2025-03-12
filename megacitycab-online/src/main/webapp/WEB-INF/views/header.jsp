@@ -8,10 +8,7 @@
 
 <% 
 User loggedInUser = (User) session.getAttribute("loggedInUser");
-if (loggedInUser == null) {
-    response.sendRedirect(request.getContextPath() + "/login.jsp");
-    return;
-}
+
 %>
 
 <!DOCTYPE html>
@@ -19,7 +16,7 @@ if (loggedInUser == null) {
 <head>
     <meta charset="UTF-8">
     <title>MegaCity Cab Booking </title>
-    <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/header.css">
+    <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/header.css">
 </head>
 <body>
 <div>
@@ -30,6 +27,9 @@ if (loggedInUser == null) {
                 <li><a href="<c:url value='/HomeController'/>"> Home</a></li>
                 <% if (loggedInUser == null || !loggedInUser.getRole().toString().equals("DRIVER")) { %>
            			 <li><a href="<c:url value='/BookCab'/>">Book Cab</a></li>
+        			<% } %>
+        			<% if (loggedInUser.getRole().toString().equals("ADMIN")) { %>
+           			 <li><a href="<c:url value='/UserController'/>">View Users</a></li>
         			<% } %>
                 <li><a href="<c:url value='/BookingController/list'/>">Manage Booking</a></li>
                 <% if (loggedInUser.getRole().toString().equals("ADMIN")) { %>
@@ -42,7 +42,7 @@ if (loggedInUser == null) {
            			 <li><a href="<c:url value='/TrackBooking'/>">Ongoing Booking</a></li>
         			<% } %>
                 <li><a href="<c:url value='/AboutUs.jsp'/>">About Us</a></li>
-                <li><a href="<c:url value='/Help.jsp'/>">Help</a></li>
+                <li><a href="<c:url value='/HelpController'/>">Help</a></li>
 				 <li><a href="<c:url value='/logout'/>">Logout</a></li>
 				 
             </ul>

@@ -26,13 +26,13 @@ if(userRole.equals("DRIVER")|| userRole== null){
     List<Customer> customers = (List<Customer>) request.getAttribute("customers");
     
 %>
-<jsp:include page="/header.jsp" />
+<jsp:include page="/WEB-INF/views/header.jsp" />
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Book Cab</title>
-<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/BookCab.css">
+<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/BookCab.css">
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -137,6 +137,6 @@ document.addEventListener("DOMContentLoaded", function () {
     </div>
 
 
-<%@ include file="/footer.jsp" %>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html>

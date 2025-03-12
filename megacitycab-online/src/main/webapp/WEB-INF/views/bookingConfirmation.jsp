@@ -26,7 +26,7 @@ Booking booking = (Booking)request.getSession().getAttribute("booking");
 <head>
 <meta charset="UTF-8">
 <title>Booking Confirmation</title>
-<link rel="stylesheet" type="text/css" href="<%= request.getContextPath()%>/BookingConfirmation.css">
+<link rel="stylesheet" type="text/css" href="<%= request.getContextPath()%>/css/BookingConfirmation.css">
 </head>
 <body>
     <div class="container">

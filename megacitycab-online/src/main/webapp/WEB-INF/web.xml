@@ -112,6 +112,18 @@
   	<description></description>
   	<servlet-class>com.megacitycab.controller.ViewBookingDetailController</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>UserController</servlet-name>
+  	<display-name>UserController</display-name>
+  	<description></description>
+  	<servlet-class>com.megacitycab.controller.UserController</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>HelpController</servlet-name>
+  	<display-name>HelpController</display-name>
+  	<description></description>
+  	<servlet-class>com.megacitycab.controller.HelpController</servlet-class>
+  </servlet>
    <servlet-mapping>
   	<servlet-name>RegisterController</servlet-name>
   	<url-pattern>/RegisterController</url-pattern>
@@ -177,6 +189,14 @@
   <servlet-mapping>
   	<servlet-name>ViewBookingDetailController</servlet-name>
   	<url-pattern>/ViewBookingDetailController</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>UserController</servlet-name>
+  	<url-pattern>/UserController</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>HelpController</servlet-name>
+  	<url-pattern>/HelpController</url-pattern>
   </servlet-mapping>
   
    

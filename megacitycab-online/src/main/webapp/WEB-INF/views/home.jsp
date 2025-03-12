@@ -2,7 +2,7 @@
 <%@page import="com.megacitycab.utils.SessionUtils"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/header.jsp" %>
+<%@ include file="/WEB-INF/views/header.jsp" %>
 
 
 <jsp:include page="/WEB-INF/views/validation/loginCheck.jsp" />
@@ -47,6 +47,6 @@ Your Ride, Your Way.  </h3>
 <h4>MegaCity Cabs is here to provide you with fast, reliable, and affordable transportation in the city. Whether you're heading to work, catching a flight, or simply need to get from point A to point B, we’ve got you covered.</h4>
 </div>
 </div>
-<%@ include file="/footer.jsp" %>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html>

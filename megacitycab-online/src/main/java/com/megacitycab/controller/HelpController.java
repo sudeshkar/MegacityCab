@@ -7,32 +7,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.megacitycab.service.BookingService;
-
-public class CancelBookingServlet extends HttpServlet {
+public class HelpController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private BookingService bookingService;
-
-
-	@Override
-	public void init() throws ServletException{
-		bookingService = BookingService.getInstance();
-	}
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		request.getRequestDispatcher("/WEB-INF/views/Help.jsp").forward(request, response);
 
 	}
 
-
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int bookingNumber =Integer.parseInt(request.getParameter("bookingNumber")) ;
-		 System.out.println(bookingNumber);
-		bookingService.deleteBooking(bookingNumber);
-		response.sendRedirect(request.getContextPath() + "/BookingController/list");
+
+
 	}
 
 }

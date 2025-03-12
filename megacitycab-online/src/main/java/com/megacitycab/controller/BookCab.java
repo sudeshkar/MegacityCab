@@ -44,7 +44,7 @@ public class BookCab extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if (!SessionUtils.isUserLoggedIn(request)) {
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("/index.jsp");
             return;
         }
 		User user= SessionUtils.getLoggedInUser(request);
@@ -81,7 +81,7 @@ public class BookCab extends HttpServlet {
         List<Cab> cabs = cabService.getAllCabs();
         request.setAttribute("drivers", drivers);
         request.setAttribute("cabs", cabs);
-        request.getRequestDispatcher("/BookCab.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/BookCab.jsp").forward(request, response);
 	}
 
 	public void ListCustomerDriverAndCab(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{

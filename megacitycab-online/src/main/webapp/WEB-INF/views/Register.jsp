@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Register Page</title>
-<link rel="stylesheet" href="Register.css" />
+<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/Register.css" />
 </head>
 <body>
 <div class="container">
@@ -85,7 +85,7 @@
     </div>
 
     <script>
-        // Show/hide fields based on user type selection
+         
         document.querySelectorAll('input[name="userType"]').forEach(radio => {
             radio.addEventListener('change', function() {
                 document.getElementById('driverFields').style.display = 

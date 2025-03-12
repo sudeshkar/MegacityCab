@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<jsp:include page="header.jsp" />
+<jsp:include page="/WEB-INF/views/header.jsp" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -104,6 +104,6 @@
     </div>
 </div>
 
-<jsp:include page="footer.jsp" />
+<jsp:include page="/WEB-INF/views/footer.jsp" />
 </body>
 </html>

@@ -12,12 +12,12 @@ import com.megacitycab.model.Bill;
 import com.megacitycab.model.Booking;
 import com.megacitycab.service.BillService;
 import com.megacitycab.service.BookingService;
- 
+
 public class ViewBookingDetailController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private BookingService bookingService;
 	private BillService billService;
-	 
+
 
 
 	@Override
@@ -26,9 +26,10 @@ public class ViewBookingDetailController extends HttpServlet {
 		billService = BillService.getInstance();
 	}
 
-    
+
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 
+
 		int bookingNumber = Integer.parseInt(request.getParameter("bookingNumber")) ;
 		Booking booking = bookingService.getBookingById(bookingNumber);
 		try {
@@ -37,14 +38,15 @@ public class ViewBookingDetailController extends HttpServlet {
 			request.setAttribute("booking", booking);
 			request.getRequestDispatcher("/WEB-INF/views/ViewBookingDetail.jsp").forward(request, response);
 		} catch (SQLException e) {
-			 
+
 			e.printStackTrace();
 		}
-		
+
 	}
- 
+
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 
+
 		int bookingNumber = Integer.parseInt(request.getParameter("bookingID")) ;
 		Booking booking = bookingService.getBookingById(bookingNumber);
 		try {
@@ -53,7 +55,7 @@ public class ViewBookingDetailController extends HttpServlet {
 			request.setAttribute("booking", booking);
 			request.getRequestDispatcher("/WEB-INF/views/ViewBookingDetail.jsp").forward(request, response);
 		} catch (SQLException e) {
-			 
+
 			e.printStackTrace();
 		}
 	}

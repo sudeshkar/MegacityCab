@@ -10,7 +10,7 @@
 <%@page import="com.megacitycab.model.Booking"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="header.jsp" %>
+<%@ include file="/WEB-INF/views/header.jsp" %>
 <%
 response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 if (!SessionUtils.isUserLoggedIn(request)) {
@@ -32,7 +32,7 @@ List<Cab> cabs = (List<Cab>) request.getAttribute("cabs");
 <head>
 <meta charset="UTF-8">
 <title>Manage Bookings</title>
-<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/ManageBooking.css">
+<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/ManageBooking.css">
 <script>
     function calculateFare() {
         var distance = parseFloat(document.getElementById("distance").value);
@@ -238,6 +238,6 @@ List<Cab> cabs = (List<Cab>) request.getAttribute("cabs");
     </table>
 <% } // Close if ("DRIVER".equals(userRole)) %>
 
-<%@ include file="footer.jsp" %>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html>

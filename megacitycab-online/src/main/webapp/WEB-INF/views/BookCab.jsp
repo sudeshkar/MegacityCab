@@ -16,7 +16,7 @@ if (!SessionUtils.isUserLoggedIn(request)) {
 User LoggedInUser = SessionUtils.getLoggedInUser(request);
 String userRole = LoggedInUser.getRole().toString();
 if(userRole.equals("DRIVER")|| userRole== null){
-	response.sendRedirect("home.jsp");
+	response.sendRedirect("/HomeController");
     return;
 }
 %>
@@ -24,15 +24,15 @@ if(userRole.equals("DRIVER")|| userRole== null){
     List<Driver> drivers = (List<Driver>) request.getAttribute("drivers");
     List<Cab> cabs = (List<Cab>) request.getAttribute("cabs");
 %>
-<jsp:include page="header.jsp" />
+<jsp:include page="/WEB-INF/views/header.jsp" />
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/BookCab.css">
 <title>Book Cab</title>
-<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/BookCab.css">
+
 <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
@@ -155,6 +155,6 @@ if(userRole.equals("DRIVER")|| userRole== null){
 
  
 
-<%@ include file="footer.jsp" %>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html>

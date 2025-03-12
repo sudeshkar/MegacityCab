@@ -93,7 +93,7 @@ public class BookingController extends HttpServlet {
 		            System.out.println("Bookings Found: " + bookings.size());
 		        }
 				request.setAttribute("bookings", bookings);
-				request.getRequestDispatcher("/ManageBooking.jsp").forward(request, response);
+				request.getRequestDispatcher("/WEB-INF/views/ManageBooking.jsp").forward(request, response);
 			}else if(LoggedInUser.getRole().toString().equalsIgnoreCase("DRIVER")) {
 				int userid =LoggedInUser.getUserID();
 				Driver driver= driverService.getDriverByUserID(userid);
@@ -111,7 +111,7 @@ public class BookingController extends HttpServlet {
 		        }
 				request.setAttribute("bookings", bookings);
 				request.setAttribute("nonPendingBookings", nonPendingBookings);
-				request.getRequestDispatcher("/ManageBooking.jsp").forward(request, response);
+				request.getRequestDispatcher("/WEB-INF/views/ManageBooking.jsp").forward(request, response);
 
 			}
 
@@ -127,7 +127,7 @@ public class BookingController extends HttpServlet {
             request.setAttribute("cabs", cabs);
             request.setAttribute("drivers", drivers);
             request.setAttribute("customers", customers);
-            request.getRequestDispatcher("/ManageBooking.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/ManageBooking.jsp").forward(request, response);
             }
 		} catch ( SQLException e) {
             e.printStackTrace();

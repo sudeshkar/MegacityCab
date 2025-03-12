@@ -1,7 +1,6 @@
 package com.megacitycab.controller;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -41,13 +40,13 @@ public class UpdateBookingController extends HttpServlet {
 	        updateBookingStatus(bookingID, newStatus);
 	        response.sendRedirect(request.getContextPath() + "/BookingController/list");
 	    } else if ("delete".equals(action)) {
-	    	
-	  
+
+
 				deleteBooking(bookingID);
 				response.sendRedirect(request.getContextPath() + "/BookingController/list");
-		
-			
-	        
+
+
+
 	    }
 	}
 

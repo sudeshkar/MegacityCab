@@ -39,7 +39,7 @@ if (loginMessage != null) {
 			<div class="login">
 				<form class="form" action="<%= request.getContextPath() %>/LoginController" method="post">
 					<label for="chk" aria-hidden="true">Megacity Cab Log in</label>
-					<input class="input" type="email" name="email" placeholder="Email" required="">
+					<input class="input" type="email" name="email" placeholder="Email" required="" >
 					<input class="input" type="password" name="pswd" placeholder="Password" required="">
 					<button type="submit">Log in</button>
 				</form>

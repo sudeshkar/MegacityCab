@@ -72,24 +72,24 @@ public class TrackBooking extends HttpServlet {
 		Bill bill =billService.Createbill(booking, 0);
 		try {
 			billService.addBill(bill);
-			
+
 		} catch (SQLException e) {
-			 
+
 			e.printStackTrace();
 		}
-		
+
 		if (result) {
 			System.out.println("Update Booking Status");
 		}
 		else {
 			System.out.println("Failed to Update Status");
 		}
-		 
-		response.sendRedirect(request.getContextPath() + "/TrackBooking");	
-		 
-		 
+
+		response.sendRedirect(request.getContextPath() + "/TrackBooking");
+
+
 	}
-	
-	 
+
+
 
 }

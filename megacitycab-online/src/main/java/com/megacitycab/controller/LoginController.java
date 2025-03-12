@@ -60,7 +60,7 @@ public class LoginController extends HttpServlet {
 				session.setAttribute("loginMessage", "Login successful!");
 			    session.setAttribute("messageType", "success");
 				session.setAttribute("loggedInUser", user);
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/home.jsp");
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/home.jsp");
 				dispatcher.forward(request, response);
 
 			}

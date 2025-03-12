@@ -7,7 +7,7 @@
 <%@page import="com.megacitycab.model.Customer"%>
 <%@page import="com.megacitycab.utils.SessionUtils"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/header.jsp" %>
+<%@ include file="/WEB-INF/views/header.jsp" %>
 <%
 response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 if (!SessionUtils.isUserLoggedIn(request)) {
@@ -69,6 +69,6 @@ double totalFare = bill.getTaxAmount();
 <button class=button type="submit"> Back to Manage Booking </button> 
 </form>
 
-<%@ include file="/footer.jsp" %>
+<%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>
 </html>
