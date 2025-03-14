@@ -14,7 +14,7 @@ if (!SessionUtils.isUserLoggedIn(request)) {
 }
 
  
-if (!"ADMIN".equals(loggedInUser.getRole().toString())) { // Adjusted for UserRole enum
+if (!"ADMIN".equals(loggedInUser.getRole().toString())) {  
     response.sendRedirect("/index.jsp");
     return;
 }
@@ -31,6 +31,8 @@ DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
 </head>
 <body>
 <h2>All Users</h2>
+
+<form action="<%= request.getContextPath() %>/AddAdminController" method="get"> <button type="submit"> Add Admin Users</button> </form>
 
 <% if (users == null || users.isEmpty()) { %>
     <p>No users found.</p>
@@ -63,7 +65,7 @@ DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
     </table>
 <% } %>
 
-<a href="<%= request.getContextPath() %>/home.jsp">Back to home</a>
+<a href="<%= request.getContextPath() %>/HomeController">Back to home</a>
 
 <%@ include file="/WEB-INF/views/footer.jsp" %>
 </body>

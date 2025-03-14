@@ -32,10 +32,6 @@ public class AddCabController extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (!SessionUtils.isUserLoggedIn(request)) {
-            response.sendRedirect("index.jsp");
-            return;
-        }
 		String action = request.getParameter("action");
 
         if (action == null) {

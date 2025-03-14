@@ -4,10 +4,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<jsp:include page="/WEB-INF/views/validation/loginCheck.jsp" />
 
-<% 
-User loggedInUser = (User) session.getAttribute("loggedInUser");
+
+<%
+  User loggedInUser = SessionUtils.getLoggedInUser(request);
+if (loggedInUser == null) {
+    
+    response.sendRedirect(request.getContextPath() + "/index.jsp");
+    return;
+}
+%>
+<% loggedInUser = (User) session.getAttribute("loggedInUser");
 
 %>
 

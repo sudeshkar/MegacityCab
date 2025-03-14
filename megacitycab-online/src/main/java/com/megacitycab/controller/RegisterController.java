@@ -2,10 +2,12 @@ package com.megacitycab.controller;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.megacitycab.model.Customer;
 import com.megacitycab.model.Driver;
@@ -29,7 +31,7 @@ public class RegisterController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		request.getRequestDispatcher("/Register.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/views/Register.jsp").forward(request, response);
 	}
 
 	@Override
@@ -37,11 +39,19 @@ public class RegisterController extends HttpServlet {
 		registerUser(request,response);
 	}
 
-	public void registerUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void registerUser(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		 
 		String userType =request.getParameter("userType");
 		String userName = request.getParameter("username");
 		String password = request.getParameter("password");
 		String email = request.getParameter("email");
+		if (userService.isUserExist(email)) {
+			request.getSession().setAttribute("errorMessage", "User already exists with this email.");
+			request.getSession().setAttribute("messageType", "error");  
+		    response.sendRedirect(request.getContextPath() + "/index.jsp");
+		    return;
+		}
+		else {
 		if (userType.equalsIgnoreCase("CUSTOMER")) {
 			System.out.println(userType);
 			UserRole userRole = UserRole.CUSTOMER;
@@ -80,11 +90,11 @@ public class RegisterController extends HttpServlet {
 			String phone =request.getParameter("phone");
 			String address =request.getParameter("address");
 			int userid= userService.createUser(user);
-			User userr =userService.getUserById(userid);
+			user =userService.getUserById(userid);
 			Driver driver = new Driver(
-					userr.getUserID(),
-					userr.getName(),
-					userr.getEmail(),
+					user.getUserID(),
+					user.getName(),
+					user.getEmail(),
 					userRole,
 					licenseNumber,phone,phone,address
 					);
@@ -99,7 +109,7 @@ public class RegisterController extends HttpServlet {
 		}
 		response.sendRedirect(request.getContextPath() + "/index.jsp");
 	}
-
+	}
 
  }
 

@@ -5,14 +5,18 @@
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
   <filter>
-  	<filter-name>NoCacheFilter</filter-name>
-  	<display-name>NoCacheFilter</display-name>
+  	<filter-name>LoginCheckFilter</filter-name>
+  	<display-name>LoginCheckFilter</display-name>
   	<description></description>
-  	<filter-class>com.megacitycab.filter.NoCacheFilter</filter-class>
+  	<filter-class>com.megacitycab.filter.LoginCheckFilter</filter-class>
+  	<init-param>
+        <param-name>loginPage</param-name>
+        <param-value>/index.jsp</param-value>
+    </init-param>
   </filter>
   <filter-mapping>
-  	<filter-name>NoCacheFilter</filter-name>
-  	<url-pattern>/*</url-pattern>
+  	<filter-name>LoginCheckFilter</filter-name>
+  	<url-pattern>*.jsp</url-pattern>
   </filter-mapping>
   
   
@@ -124,6 +128,12 @@
   	<description></description>
   	<servlet-class>com.megacitycab.controller.HelpController</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>AddAdminController</servlet-name>
+  	<display-name>AddAdminController</display-name>
+  	<description></description>
+  	<servlet-class>com.megacitycab.controller.AddAdminController</servlet-class>
+  </servlet>
    <servlet-mapping>
   	<servlet-name>RegisterController</servlet-name>
   	<url-pattern>/RegisterController</url-pattern>
@@ -197,6 +207,10 @@
   <servlet-mapping>
   	<servlet-name>HelpController</servlet-name>
   	<url-pattern>/HelpController</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>AddAdminController</servlet-name>
+  	<url-pattern>/AddAdminController</url-pattern>
   </servlet-mapping>
   
    

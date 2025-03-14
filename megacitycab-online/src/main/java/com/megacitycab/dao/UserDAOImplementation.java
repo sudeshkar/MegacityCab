@@ -136,6 +136,33 @@ public class UserDAOImplementation implements UserDAO {
 	    }
 	    return user;
 	}
+	@Override
+	public List<User>  getUserByRole(UserRole role) {
+		List<User> users = new ArrayList<>();
+	    String sql = "SELECT * FROM users WHERE role = ?";
+	    User user = null;
+	    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+	        ps.setString(1, role.toString());
+
+	        try (ResultSet rs = ps.executeQuery()) {
+	            while (rs.next()) {
+
+	                user = new User();
+	                user.setUserID(rs.getInt("userID"));
+	                user.setName(rs.getString("userName"));
+	                user.setPassword(rs.getString("password"));
+	                user.setEmail(rs.getString("email"));
+	                user.setRole(UserRole.valueOf(rs.getString("role")));
+	                user.setLastLogindate(rs.getTimestamp("lastLoginDate"));
+	                users.add(user);
+	                
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return users;
+	}
 
 	@Override
 	public List<User> getAllUsers() {

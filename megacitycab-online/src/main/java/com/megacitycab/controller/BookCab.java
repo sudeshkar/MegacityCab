@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.megacitycab.model.Booking;
 import com.megacitycab.model.Cab;
@@ -43,11 +44,14 @@ public class BookCab extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (!SessionUtils.isUserLoggedIn(request)) {
-            response.sendRedirect("/index.jsp");
-            return;
-        }
-		User user= SessionUtils.getLoggedInUser(request);
+		HttpSession session = request.getSession(false); // Don't create a new session if not existing
+	    User user = (session != null) ? (User) session.getAttribute("user") : null;
+
+	    if (user == null) {
+	        response.sendRedirect("login.jsp"); // Redirect to login page if user is not logged in
+	        return;
+	    }
+		user = SessionUtils.getLoggedInUser(request);
 		if (user.getRole().toString().equals("ADMIN")) {
 			ListCustomerDriverAndCab(request,response);
 		}
@@ -62,10 +66,6 @@ public class BookCab extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (!SessionUtils.isUserLoggedIn(request)) {
-            response.sendRedirect("/index.jsp");
-            return;
-        }
 		User user= SessionUtils.getLoggedInUser(request);
 		if (user.getRole().toString().equals("ADMIN")) {
 			addBookingAdmin(request,response);
