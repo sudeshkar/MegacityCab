@@ -1,10 +1,21 @@
+<%@page import="com.megacitycab.model.User"%>
+<%@ page import="com.megacitycab.utils.SessionUtils" %>
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/Login.css">
 </head>
 <body>
+<%
+        User loggedInUser = SessionUtils.getLoggedInUser(request);
+        if (loggedInUser != null) {
+             
+            response.sendRedirect(request.getContextPath() + "/HomeController");
+            return;
+        }
+    %>
 <div class="logo">
 <img alt="cab_image" src="<%= request.getContextPath() %>/images/cab.jpeg">
+
 <h1>The Mega Cab Booking</h1>
 <%
 String loginMessage = (String) session.getAttribute("loginMessage");
@@ -24,7 +35,27 @@ if (loginMessage != null) {
     session.removeAttribute("messageType");
 }
 %>
-<button type="button" onclick="window.location.href ='AboutUs.jsp';">About Us</button>
+<%
+String errorMessage = (String) session.getAttribute("errorMessage");
+ 
+if (errorMessage != null) {
+%>
+<div class="notification <%= messageType %>">
+    <%= errorMessage %>
+</div>
+<script>
+    setTimeout(function() {
+        document.getElementById("notification").style.display = "none";
+    }, 3000);  
+</script>
+<%
+    session.removeAttribute("errorMessage"); 
+    session.removeAttribute("messageType"); 
+}
+%>
+<a href="<%= request.getContextPath() %>/AboutUs.jsp" style="text-decoration: none;">
+    <button>About Us</button>
+</a>
 </div>
 
 

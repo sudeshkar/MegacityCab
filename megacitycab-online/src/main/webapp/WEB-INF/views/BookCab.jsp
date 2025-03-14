@@ -74,6 +74,64 @@ if(userRole.equals("DRIVER")|| userRole== null){
                 }
             });
         });
+        
+        function validateForm() {
+            let pickup = document.forms["bookingForm"]["pickup"].value;
+            let destination = document.forms["bookingForm"]["destination"].value;
+            if (pickup === destination) {
+                alert("Pickup and destination cannot be the same!");
+                return false;
+            }
+            return true;
+        }
+        
+        document.addEventListener("DOMContentLoaded", function () {
+            const bookingDate = document.getElementById("date");
+            const bookingTime = document.getElementById("time");
+            const pickupLocation = document.getElementById("pickup");
+            const dropoffLocation = document.getElementById("dropoff");
+            const form = document.getElementById("bookingForm");
+
+            // Prevent past dates
+            const today = new Date().toISOString().split("T")[0];
+            bookingDate.setAttribute("min", today);
+
+            form.addEventListener("submit", function (event) {
+                const selectedDate = bookingDate.value;
+                const selectedTime = bookingTime.value;
+                const pickup = pickupLocation.value.trim();
+                const dropoff = dropoffLocation.value.trim();
+                const currentDateTime = new Date();
+
+                // Validate date and time
+                if (!selectedDate || !selectedTime) {
+                    alert("Please select a valid date and time.");
+                    event.preventDefault();
+                    return false;
+                }
+
+                const selectedDateTime = new Date(`${selectedDate}T${selectedTime}`);
+                if (selectedDateTime < currentDateTime) {
+                    alert("You cannot select a past date or time.");
+                    event.preventDefault();
+                    return false;
+                }
+
+                // Validate pickup and dropoff locations
+                if (!pickup || !dropoff) {
+                    alert("Please enter both pickup and drop-off locations.");
+                    event.preventDefault();
+                    return false;
+                }
+
+                if (pickup.toLowerCase() === dropoff.toLowerCase()) {
+                    alert("Pickup and drop-off locations cannot be the same.");
+                    event.preventDefault();
+                    return false;
+                }
+            });
+        });
+
 
     </script>
 </head>
@@ -83,7 +141,7 @@ if(userRole.equals("DRIVER")|| userRole== null){
     <div class="container">
         <h2>🚖 Book Your Ride</h2>
 
-			<form action="<%= request.getContextPath() %>/BookCab" method="post">
+			<form id="bookingForm" action="<%= request.getContextPath() %>/BookCab" method="post">
 			 <!-- Pickup Location -->
             <label for="pickup"><i class="fas fa-map-marker-alt"></i> Pickup Location:</label>
             <select id="pickup" name="pickup" required>

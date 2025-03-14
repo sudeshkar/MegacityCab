@@ -48,7 +48,7 @@ Booking booking = (Booking)request.getSession().getAttribute("booking");
             <p>A confirmation email has been sent to <%= customerEmailParam %>.</p>
             
             <div class="button-group">
-                <a href="<c:url value='/home.jsp'/>" class="btn">Back to Home</a>
+                <a href="<c:url value='/HomeController'/>" class="btn">Back to Home</a>
                 <a href="<c:url value='/BookingController/list'/>" class="btn">View All Bookings</a>
             </div>
         </div>

@@ -23,7 +23,6 @@ import com.megacitycab.service.CustomerService;
 import com.megacitycab.service.DriverService;
 import com.megacitycab.utils.SessionUtils;
 
-@WebServlet("/AddBooking")
 public class BookingController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -40,10 +39,7 @@ public class BookingController extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		if (!SessionUtils.isUserLoggedIn(request)) {
-            response.sendRedirect(request.getContextPath() + "/index.jsp");
-            return;
-        }
+		
 		String pathInfo = request.getPathInfo();
 		System.out.println("PathInfo: " + pathInfo);
 
@@ -60,10 +56,7 @@ public class BookingController extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (!SessionUtils.isUserLoggedIn(request)) {
-            response.sendRedirect(request.getContextPath() + "/index.jsp");
-            return;
-        }
+		 
 		String action = request.getParameter("action");
 		if (action.equals("addBooking")) {
 			addbooking(request, response);

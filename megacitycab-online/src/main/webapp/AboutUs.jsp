@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<jsp:include page="/WEB-INF/views/header.jsp" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,6 +14,10 @@
             background-color: black;
             margin: 0;
             padding: 0;
+        }
+        button{
+        margin: auto;
+        
         }
         .container {
             max-width: 1100px;
@@ -62,6 +65,7 @@
         .team-member h3 {
             font-size: 18px;
         }
+        
     </style>
 </head>
 <body>
@@ -102,6 +106,9 @@
             <h3>SathiesKumar Sudeshkar - Customer Support Lead</h3>
         </div>
     </div>
+    <a href="<%= request.getContextPath() %>/index.jsp">
+    <button>Back to Home</button>
+</a>
 </div>
 
 <jsp:include page="/WEB-INF/views/footer.jsp" />

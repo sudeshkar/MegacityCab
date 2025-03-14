@@ -3,9 +3,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/header.jsp" %>
-
-
-<jsp:include page="/WEB-INF/views/validation/loginCheck.jsp" />
+<%
+          loggedInUser = SessionUtils.getLoggedInUser(request);
+        
+        if (loggedInUser == null) {
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
+            return;
+        }
+    %>
 
 <!DOCTYPE html>
 <html>

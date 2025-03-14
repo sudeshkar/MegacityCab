@@ -5,6 +5,7 @@ import java.util.List;
 import com.megacitycab.dao.UserDAO;
 import com.megacitycab.dao.UserDAOImplementation;
 import com.megacitycab.model.User;
+import com.megacitycab.model.UserRole;
 
 public class UserService {
 	private static UserService instance;
@@ -46,6 +47,13 @@ public class UserService {
 	}
 	public int createUser(User user) {
 		return userDAO.createUser(user);
+	}
+	public List<User> getUserByRole(UserRole role) {
+		return userDAO.getUserByRole(role);
+	}
+	
+	public boolean isUserExist(String email) {
+		return userDAO.getUserByEmail(email) !=null;
 	}
 
 }
